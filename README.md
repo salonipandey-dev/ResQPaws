@@ -65,10 +65,5 @@ Focus on trust, care, and clarity
 
 The goal is to make users feel safe, calm, and encouraged to help.
 
-👩‍💻 Built By
-
-Saloni
-
-Kashish
 
 Built as a student project to explore frontend development while working on a meaningful real-world problem.
