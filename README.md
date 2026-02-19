@@ -31,7 +31,7 @@ resqpaws/ │ ├── index.html # Home page ├── about.html # About page
 
 🚀 How to Run Locally
 Clone the repository:
-git clone https://github.com/your-username/resqpaws.git
+
 
 Open the project folder.
 
