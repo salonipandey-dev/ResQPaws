@@ -59,10 +59,7 @@ urgencyButtons.forEach((button) => {
 });
 
 emergencyBtn.addEventListener("click", () => {
-  showToast("Emergency mode activated. Use Report Animal Now immediately.");
-  if (stepsSection) {
-    stepsSection.scrollIntoView({ behavior: "smooth", block: "center" });
-  }
+  window.location.href = "emergency.html";
 });
 
 menuBtn.addEventListener("click", () => {
@@ -80,13 +77,7 @@ document.addEventListener("click", (event) => {
 });
 
 loginBtn.addEventListener("click", () => {
-  const typedName = prompt("Enter your name to login:");
-  if (!typedName) return;
-  state.userName = typedName.trim();
-  if (!state.userName) return;
-  localStorage.setItem("resq_user_name", state.userName);
-  updateLoginLabel();
-  showToast(`Welcome, ${state.userName.split(" ")[0]}`);
+  window.location.href = "login.html";
 });
 
 locationBtn.addEventListener("click", () => {
