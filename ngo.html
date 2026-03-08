@@ -105,17 +105,26 @@
       <aside class="side-panel">
         <section class="panel">
           <h4>Quick Links</h4>
-          <a href="#">&#128203; My Active Cases</a>
-          <a href="#">&#9989; Track Reports</a>
+          <a href="ngo.html">&#128203; My Active Cases</a>
+          <a href="user.html">&#9989; Track Reports</a>
           <a href="login.html">&#128682; Logout</a>
         </section>
       </aside>
     </section>
   </main>
+  <p id="ngoToast" class="toast" aria-live="polite"></p>
   <script>
     const navItems = document.querySelectorAll(".nav-links a");
     const filterTabs = document.querySelectorAll(".tabs a");
     const caseCards = document.querySelectorAll(".cases-grid .case-card");
+    const acceptButtons = document.querySelectorAll(".case-footer button");
+    const ngoToast = document.getElementById("ngoToast");
+
+    function showNgoToast(message) {
+      ngoToast.textContent = message;
+      ngoToast.classList.add("show");
+      setTimeout(() => ngoToast.classList.remove("show"), 1600);
+    }
 
     navItems.forEach((item) => {
       item.addEventListener("click", (event) => {
@@ -143,6 +152,15 @@
           const shouldShow = filterMap[selected](card);
           card.classList.toggle("is-hidden", !shouldShow);
         });
+      });
+    });
+
+    acceptButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const card = button.closest(".case-card");
+        if (!card) return;
+        card.dataset.status = "completed";
+        showNgoToast("Case accepted and marked completed.");
       });
     });
   </script>

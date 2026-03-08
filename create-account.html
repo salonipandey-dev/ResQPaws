@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account | ResQPaws</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="cssfiles/createaccountstyle.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="brand-wrap" aria-label="ResQPaws branding">
+      <span class="brand-mark" aria-hidden="true">&#128062;</span>
+      <h1 class="brand-name"><span class="brand-dark">ResQ</span><span class="brand-accent">Paws</span></h1>
+    </header>
+
+    <section class="welcome">
+      <h2>Create Account</h2>
+      <p>Join as User or NGO / Volunteer</p>
+    </section>
+
+    <section class="account-card" aria-label="Create account form">
+      <form id="createAccountForm" class="form" action="#" method="post" novalidate>
+        <div class="grid">
+          <label class="field">
+            <span>Full Name</span>
+            <input id="fullName" type="text" placeholder="Enter your full name" required />
+          </label>
+
+          <label class="field">
+            <span>Email</span>
+            <input id="email" type="email" placeholder="Enter your email" required />
+          </label>
+        </div>
+
+        <div class="grid">
+          <label class="field">
+            <span>Phone</span>
+            <input id="phone" type="tel" placeholder="Enter phone number" required />
+          </label>
+
+          <label class="field">
+            <span>Role</span>
+            <select id="role" required>
+              <option value="">Select role</option>
+              <option value="user">User</option>
+              <option value="ngo">NGO / Volunteer</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="grid">
+          <label class="field">
+            <span>Password</span>
+            <input id="password" type="password" placeholder="Create password" required />
+          </label>
+
+          <label class="field">
+            <span>Confirm Password</span>
+            <input id="confirmPassword" type="password" placeholder="Confirm password" required />
+          </label>
+        </div>
+
+        <label class="agree">
+          <input id="terms" type="checkbox" required />
+          <span>I agree to the terms and privacy policy.</span>
+        </label>
+
+        <button class="create-btn" type="submit">Create Account</button>
+      </form>
+
+      <p class="signin">Already have an account? <a href="login.html">Login</a></p>
+    </section>
+  </main>
+
+  <p class="toast" id="toast" aria-live="polite"></p>
+  <script src="create-account.js"></script>
+</body>
+</html>

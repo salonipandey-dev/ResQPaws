@@ -16,15 +16,15 @@
       <h1><span class="brand-dark">ResQ</span><span class="brand-accent">Paws</span></h1>
     </div>
     <nav class="nav-links" aria-label="User navigation">
-      <a href="#">My Reports</a>
-      <a href="#">Profile</a>
+      <a href="user.html#reports">My Reports</a>
+      <a href="about.html">Profile</a>
       <a href="login.html">Logout</a>
     </nav>
   </header>
 
   <main class="dashboard">
     <section class="feed">
-      <div class="feed-header">
+      <div class="feed-header" id="reports">
         <h2>Report Feed</h2>
         <p>View and track your reported animals.</p>
       </div>
@@ -98,7 +98,7 @@
     </section>
 
     <aside class="sidebar">
-      <button class="report-btn" type="button">+ Report New Animal</button>
+      <button class="report-btn" id="reportNewBtn" type="button">+ Report New Animal</button>
 
       <section class="panel">
         <h3>My Reports</h3>
@@ -109,10 +109,18 @@
 
       <section class="panel">
         <h3>Quick Links</h3>
-        <a class="quick-link" href="#">&#128203; My Active Cases</a>
-        <a class="quick-link" href="#">&#9989; Track Reports</a>
+        <a class="quick-link" href="ngo.html">&#128203; My Active Cases</a>
+        <a class="quick-link" href="user.html#reports">&#9989; Track Reports</a>
       </section>
     </aside>
   </main>
+  <script>
+    const reportNewBtn = document.getElementById("reportNewBtn");
+    if (reportNewBtn) {
+      reportNewBtn.addEventListener("click", () => {
+        window.location.href = "emergency.html";
+      });
+    }
+  </script>
 </body>
 </html>
