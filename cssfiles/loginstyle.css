@@ -16,6 +16,17 @@
   padding: 0;
 }
 
+a,
+button,
+input {
+  transition: all 140ms ease;
+}
+
+:focus-visible {
+  outline: 3px solid rgba(255, 125, 29, 0.35);
+  outline-offset: 2px;
+}
+
 body {
   min-height: 100vh;
   font-family: "Poppins", sans-serif;
@@ -71,7 +82,7 @@ body {
 
 .welcome p {
   margin-top: 3px;
-  font-size: clamp(1.2rem, 2.2vw, 1.65rem);
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
   color: #4f545d;
   font-weight: 500;
 }
@@ -101,7 +112,7 @@ body {
   min-height: 54px;
   padding: 8px;
   font: inherit;
-  font-size: clamp(0.95rem, 1.8vw, 1.02rem);
+  font-size: clamp(0.92rem, 1vw, 0.98rem);
   font-weight: 700;
   color: #2f333a;
   display: flex;
@@ -160,7 +171,7 @@ body {
   border: 0;
   outline: 0;
   font: inherit;
-  font-size: 1.02rem;
+  font-size: clamp(0.92rem, 1vw, 0.98rem);
   color: #5f6670;
 }
 
@@ -182,7 +193,7 @@ body {
   min-height: 58px;
   padding: 10px 16px;
   font: inherit;
-  font-size: 1.12rem;
+  font-size: clamp(1rem, 1.05vw, 1.08rem);
   font-weight: 700;
   color: #fff;
   background: linear-gradient(180deg, #ffa148 0%, var(--orange) 58%, var(--orange-deep) 100%);
@@ -245,5 +256,13 @@ body {
 
   .partner-note {
     text-align: center;
+  }
+
+  .welcome h2 {
+    font-size: 2rem;
+  }
+
+  .welcome p {
+    font-size: 1rem;
   }
 }

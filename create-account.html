@@ -26,24 +26,24 @@
         <div class="grid">
           <label class="field">
             <span>Full Name</span>
-            <input id="fullName" type="text" placeholder="Enter your full name" required />
+            <input id="fullName" name="full_name" type="text" placeholder="Enter your full name" autocomplete="name" required />
           </label>
 
           <label class="field">
             <span>Email</span>
-            <input id="email" type="email" placeholder="Enter your email" required />
+            <input id="email" name="email" type="email" placeholder="Enter your email" autocomplete="email" required />
           </label>
         </div>
 
         <div class="grid">
           <label class="field">
             <span>Phone</span>
-            <input id="phone" type="tel" placeholder="Enter phone number" required />
+            <input id="phone" name="phone" type="tel" placeholder="Enter phone number" autocomplete="tel" required />
           </label>
 
           <label class="field">
             <span>Role</span>
-            <select id="role" required>
+            <select id="role" name="role" required>
               <option value="">Select role</option>
               <option value="user">User</option>
               <option value="ngo">NGO / Volunteer</option>
@@ -54,12 +54,12 @@
         <div class="grid">
           <label class="field">
             <span>Password</span>
-            <input id="password" type="password" placeholder="Create password" required />
+            <input id="password" name="password" type="password" placeholder="Create password" autocomplete="new-password" required />
           </label>
 
           <label class="field">
             <span>Confirm Password</span>
-            <input id="confirmPassword" type="password" placeholder="Confirm password" required />
+            <input id="confirmPassword" name="confirm_password" type="password" placeholder="Confirm password" autocomplete="new-password" required />
           </label>
         </div>
 

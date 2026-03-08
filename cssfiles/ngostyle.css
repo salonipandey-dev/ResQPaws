@@ -15,6 +15,16 @@
   padding: 0;
 }
 
+a,
+button {
+  transition: all 140ms ease;
+}
+
+:focus-visible {
+  outline: 3px solid rgba(255, 125, 29, 0.35);
+  outline-offset: 2px;
+}
+
 body {
   font-family: "Poppins", sans-serif;
   color: var(--text);
@@ -60,7 +70,7 @@ body {
 .nav-links a {
   text-decoration: none;
   color: #484d55;
-  font-size: clamp(1rem, 1.35vw, 1.4rem);
+  font-size: clamp(0.92rem, 1.05vw, 1.05rem);
   padding-bottom: 6px;
 }
 
@@ -81,7 +91,7 @@ body {
 .head p {
   margin-top: 6px;
   color: #5f6670;
-  font-size: clamp(1rem, 1.55vw, 1.5rem);
+  font-size: clamp(0.95rem, 1.1vw, 1.08rem);
 }
 
 .tabs {
@@ -94,7 +104,7 @@ body {
 .tabs a {
   text-decoration: none;
   color: #5f6570;
-  font-size: clamp(1rem, 1.6vw, 1.9rem);
+  font-size: clamp(0.95rem, 1.12vw, 1.08rem);
   padding: 0 4px 12px;
 }
 
@@ -183,7 +193,7 @@ body {
 .case-body p {
   margin-top: 8px;
   color: #3f454f;
-  font-size: clamp(0.95rem, 1.25vw, 1.25rem);
+  font-size: clamp(0.92rem, 1.02vw, 1rem);
   line-height: 1.35;
 }
 
@@ -236,7 +246,7 @@ body {
   border: 0;
   border-radius: 16px;
   font: inherit;
-  font-size: clamp(1.05rem, 1.35vw, 1.45rem);
+  font-size: clamp(0.98rem, 1.08vw, 1.06rem);
   font-weight: 700;
   color: #fff;
   background: linear-gradient(180deg, #ff9f43 0%, var(--orange) 58%, var(--orange-deep) 100%);
@@ -261,7 +271,7 @@ body {
 }
 
 .panel h4 {
-  font-size: clamp(1.3rem, 1.7vw, 1.9rem);
+  font-size: clamp(1.1rem, 1.3vw, 1.3rem);
   margin-bottom: 12px;
 }
 
@@ -275,8 +285,14 @@ body {
   margin-top: 10px;
   text-decoration: none;
   color: #2d323a;
-  font-size: clamp(1rem, 1.2vw, 1.2rem);
+  font-size: clamp(0.92rem, 0.95vw, 1rem);
   font-weight: 600;
+}
+
+@media (max-width: 1400px) {
+  .case-image-wrap {
+    height: 190px;
+  }
 }
 
 .is-hidden {

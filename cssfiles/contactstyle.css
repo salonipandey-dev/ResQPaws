@@ -14,6 +14,18 @@
   padding: 0;
 }
 
+a,
+button,
+input,
+textarea {
+  transition: all 140ms ease;
+}
+
+:focus-visible {
+  outline: 3px solid rgba(255, 125, 29, 0.35);
+  outline-offset: 2px;
+}
+
 body {
   font-family: "Poppins", sans-serif;
   color: var(--text);
@@ -113,7 +125,7 @@ body {
   margin: 10px auto 0;
   max-width: 760px;
   color: var(--muted);
-  font-size: clamp(0.98rem, 1.35vw, 1.12rem);
+  font-size: clamp(0.95rem, 1vw, 1.04rem);
 }
 
 .content-grid {
@@ -154,7 +166,7 @@ body {
   border-radius: 10px;
   padding: 10px 12px;
   font: inherit;
-  font-size: 0.96rem;
+  font-size: clamp(0.92rem, 0.95vw, 0.98rem);
   color: #2f343c;
   background: #fff;
 }
@@ -223,7 +235,7 @@ body {
 
 .mini-panels p {
   margin-top: 6px;
-  font-size: 0.92rem;
+  font-size: 0.9rem;
 }
 
 .footer {
@@ -276,5 +288,14 @@ body {
     width: 100%;
     flex-wrap: wrap;
     gap: 8px 14px;
+  }
+
+  .hero {
+    padding: 16px 14px;
+  }
+
+  .contact-card,
+  .info-card {
+    padding: 14px;
   }
 }
