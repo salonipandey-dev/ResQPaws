@@ -1,89 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ResQPaws</title>
-    <link rel="stylesheet" href="cssfiles/aboutstyle.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About | ResQPaws</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="cssfiles/aboutstyle.css" />
 </head>
 <body>
-      <!-- NAVBAR -->
-<nav class="navbar">
-  <div class="nav-container">
-    <div class="logo">
-      <a href="index.html">ResQPaws</a>
+  <header class="topbar">
+    <div class="brand">
+      <span class="paw" aria-hidden="true">&#128062;</span>
+      <h1><span class="brand-dark">ResQ</span><span class="brand-accent">Paws</span></h1>
     </div>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="impact.html">Impact Dashboard</a></li>
-      <li><a href="contact.html">Contact</a></li>
-      <li><a href="login.html" class="nav-btn">Become a Hero</a></li>
-    </ul>
-  </div>
-</nav>
-    <!-- hero section of ABOUT HEADER -->
-<header>
-      <h1>About ResQPaws</h1>
-      <p>
-       Learn more about our mission to help injured animals get the care they need faster.
-      </p>
-</header>
-<!-- ABOUT SECTION -->
-<section>
-  <h2>What is ResQPaws?</h2>
-  <p>
-    ResQPaws is a platform that helps people report injured animals and connect them
-    with nearby help to enable faster rescue and care.
-  </p>
-</section>
-<section>
-  <h2>How ResQPaws Works</h2>
-  <p>ResQPaws follows a simple flow:</p>
-  <ol>
-    <li>A user joins the platform and becomes a “hero”.</li>
-    <li>The user reports an injured or abandoned animal by sharing basic details like location and condition.</li>
-    <li>The information helps nearby volunteers, rescuers, or animal welfare organizations respond more quickly.</li>
-    <li>Faster information leads to faster care and better chances of rescue.</li>
-  </ol>
-</section>
-<section>
-  <h2>Why ResQPaws Is Needed</h2>
-  <p>Many animals suffer not because people don’t care, but because:</p>
-  <ul>
-    <li>There is no clear reporting system</li>
-    <li>Help does not reach the right people on time</li>
-    <li>Information is scattered or delayed</li>
-  </ul>
-  <p>
-    ResQPaws exists to reduce this delay by creating a
-    <strong>simple, centralized reporting and connection system</strong>.
-  </p>
-</section>
-<section>
-  <h2>Who ResQPaws Is For</h2>
-  <p>ResQPaws can be used by:</p>
-  <ul>
-    <li>Anyone who sees an animal in need</li>
-    <li>Animal lovers who want to help</li>
-    <li>Volunteers and rescuers</li>
-    <li>Animal welfare organizations</li>
-  </ul>
-</section>
-<footer>
-   
-     <form action = #> 
-      <label for="connect" >Stay Connected:</label>
-      <input type="email" id="connect" placeholder="Connect us through email" />
+    <nav class="nav-links" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a class="active" href="about.html">About</a>
+      <a href="emergency.html">Emergency</a>
+      <a href="contact.html">Contact</a>
+      <a class="hero-link" href="login.html">Login</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Why ResQPaws Exists</p>
+        <h2>Faster Animal Rescue Through Better Reporting</h2>
+        <p>
+          ResQPaws helps people report injured or stray animals and connects those
+          reports to nearby volunteers and NGOs in minutes, not hours.
+        </p>
+        <div class="hero-cta">
+          <a class="btn-primary" href="emergency.html">Report Emergency</a>
+          <a class="btn-ghost" href="login.html">Join as Volunteer</a>
+        </div>
+      </div>
+      <figure class="hero-art" aria-hidden="true">
+        <img src="images/injured dog with ambulance.png" alt="" />
+      </figure>
+    </section>
+
+    <section class="stats-grid" aria-label="Platform highlights">
+      <article class="stat-card">
+        <h3>125+</h3>
+        <p>Animals reported and guided to rescue support</p>
+      </article>
+      <article class="stat-card">
+        <h3>50+</h3>
+        <p>NGOs and volunteer groups in the local network</p>
+      </article>
+      <article class="stat-card">
+        <h3>24/7</h3>
+        <p>Emergency reporting available for urgent cases</p>
+      </article>
+    </section>
+
+    <section class="content-grid">
+      <article class="panel">
+        <h3>Our Mission</h3>
+        <p>
+          Build a simple, reliable rescue reporting bridge so no injured animal
+          is ignored due to delay or missing information.
+        </p>
+      </article>
+      <article class="panel">
+        <h3>Our Vision</h3>
+        <p>
+          A city-wide safety net where anyone can trigger rapid response with
+          just a photo, location, and urgency level.
+        </p>
+      </article>
+      <article class="panel">
+        <h3>Who Can Use ResQPaws</h3>
+        <ul>
+          <li>Citizens who spot animals in distress</li>
+          <li>Rescue volunteers and transport teams</li>
+          <li>Animal welfare organizations and shelters</li>
+          <li>Students and communities who want to help</li>
+        </ul>
+      </article>
+      <article class="panel">
+        <h3>How It Works</h3>
+        <ol>
+          <li>Upload photo + add location</li>
+          <li>Select urgency (regular, urgent, critical)</li>
+          <li>Nearby NGOs receive actionable report details</li>
+          <li>Case status updates stay visible to the reporter</li>
+        </ol>
+      </article>
+    </section>
+
+    <section class="timeline">
+      <h3>Rescue Flow</h3>
+      <div class="line-steps">
+        <p><span>1</span> Report Submitted</p>
+        <p><span>2</span> NGO Assigned</p>
+        <p><span>3</span> On-Ground Response</p>
+        <p><span>4</span> Animal Stabilized</p>
+      </div>
+    </section>
+
+    <section class="faq">
+      <h3>Frequently Asked Questions</h3>
+      <details open>
+        <summary>Do I need an account to report an emergency?</summary>
+        <p>No. Emergency reporting works without login so help can be requested immediately.</p>
+      </details>
+      <details>
+        <summary>What details should I include?</summary>
+        <p>Photo, exact location, and short condition notes. These three details improve response speed most.</p>
+      </details>
+      <details>
+        <summary>Can I track what happens after submitting?</summary>
+        <p>Yes. Logged-in users can view updates like accepted, in-progress, and rescued status.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p class="footer-title">Together we can reduce rescue delays and save more lives.</p>
+    <form action="#" class="connect-form">
+      <label for="connect">Stay connected:</label>
+      <input type="email" id="connect" placeholder="Enter your email" />
       <button type="submit">Connect</button>
-     </form>
-    <p>ResQPaws © 2026</p>
-    <p>Built as a student project for animal welfare.</p>
-<<<<<<< HEAD
-    
-=======
-   
->>>>>>> 402b7038f823e3c2f8d08654e313d4e0623adb00
+    </form>
+    <p>ResQPaws &copy; 2026</p>
   </footer>
 </body>
 </html>
