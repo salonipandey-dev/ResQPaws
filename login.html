@@ -23,11 +23,11 @@
 
     <section class="login-card" aria-label="Login form card">
       <div class="role-tabs" role="tablist" aria-label="Select login role">
-        <button class="role-tab active" type="button" role="tab" aria-selected="true">
+        <button class="role-tab active" id="userTab" data-role="user" type="button" role="tab" aria-selected="true">
           <span class="role-icon" aria-hidden="true">&#128100;</span>
           User
         </button>
-        <button class="role-tab" type="button" role="tab" aria-selected="false">
+        <button class="role-tab" id="ngoTab" data-role="ngo" type="button" role="tab" aria-selected="false">
           <span class="role-icon" aria-hidden="true">&#127970;</span>
           NGO / Volunteer
         </button>
@@ -35,7 +35,7 @@
 
       <p class="partner-note"><span aria-hidden="true">&#9679;</span> Authorized partners only</p>
 
-      <form class="form" action="#" method="post">
+      <form class="form" id="loginForm" action="#" method="post">
         <label class="field" aria-label="Email input">
           <span class="field-icon" aria-hidden="true">&#9993;</span>
           <input type="email" name="email" placeholder="Enter your email" autocomplete="email" required />
@@ -57,5 +57,33 @@
       <a href="#" class="signup-link">Create Account</a>
     </section>
   </main>
+
+  <script>
+    const tabs = document.querySelectorAll('.role-tab');
+    const loginForm = document.getElementById('loginForm');
+    let selectedRole = 'user';
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        selectedRole = tab.dataset.role;
+        tabs.forEach((item) => {
+          item.classList.remove('active');
+          item.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+      });
+    });
+
+    loginForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (selectedRole === 'user') {
+        window.location.href = 'user.html';
+        return;
+      }
+      window.location.href = 'ngo.html';
+    });
+  </script>
 </body>
 </html>
+

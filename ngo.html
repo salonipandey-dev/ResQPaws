@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NGO Dashboard | ResQPaws</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="cssfiles/ngostyle.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="paw" aria-hidden="true">&#128062;</span>
+      <h1><span class="brand-dark">ResQ</span><span class="brand-accent">Paws</span></h1>
+    </div>
+    <nav class="nav-links" aria-label="NGO dashboard navigation">
+      <a class="active" href="#" data-nav="dashboard">Dashboard</a>
+      <a href="#" data-nav="active">Active Cases</a>
+      <a href="#" data-nav="completed">Completed</a>
+      <a href="#" data-nav="analytics">Analytics</a>
+    </nav>
+  </header>
+
+  <main class="dashboard">
+    <section class="head">
+      <h2>NGO / Volunteer Dashboard</h2>
+      <p>Manage and respond to reported animal cases.</p>
+    </section>
+
+    <nav class="tabs" aria-label="Case filters">
+      <a class="active" href="#" data-filter="all">All Cases</a>
+      <a href="#" data-filter="urgent">Urgent</a>
+      <a href="#" data-filter="nearby">Nearby Only</a>
+      <a href="#" data-filter="completed">Completed</a>
+    </nav>
+
+    <section class="content-grid">
+      <section class="cases-grid">
+        <article class="case-card case-large" data-status="urgent" data-location="andheri">
+          <div class="case-image-wrap">
+            <span class="badge critical">&#9664; CRITICAL</span>
+            <img src="images/injured dog with ambulance.png" alt="Critical injured dog case" />
+          </div>
+          <div class="case-body">
+            <div class="row">
+              <h3>&#128205; Andheri East, Mumbai</h3>
+              <span class="time"><span class="dot live"></span> Just now</span>
+            </div>
+            <p>Spotted an injured stray dog near market. Bleeding from the leg and unable to walk.</p>
+            <p class="track">
+              <span class="done">&#9989; Reported</span>
+              <span class="line"></span>
+              <span class="done">&#9989; NGO Accepted</span>
+              <span class="line muted"></span>
+            </p>
+          </div>
+          <div class="case-footer">
+            <button type="button">Accept Case</button>
+          </div>
+        </article>
+
+        <article class="case-card" data-status="active" data-location="colaba">
+          <div class="case-image-wrap">
+            <span class="badge progress">&#8853; IN PROGRESS</span>
+            <img src="images/injured dog with ambulance.png" alt="In progress case" />
+          </div>
+          <div class="case-body">
+            <h3>&#128205; Colaba, Mumbai</h3>
+            <p>The hurt animal is unable to move properly.</p>
+            <p class="track"><span class="done">&#9989; NGO Accepted</span><span class="line muted"></span></p>
+          </div>
+          <div class="case-footer"><button type="button">Accept Case</button></div>
+        </article>
+
+        <article class="case-card" data-status="active" data-location="kurla">
+          <div class="case-image-wrap">
+            <span class="badge medium">&#10003; MEDIUM</span>
+            <img src="images/injured dog with ambulance.png" alt="Medium priority case" />
+          </div>
+          <div class="case-body">
+            <h3>&#128205; Kurla, Mumbai</h3>
+            <p>The dog seems weak and needs quick support.</p>
+            <p class="track"><span class="done">&#9989; NGO Accepted</span><span class="line muted"></span></p>
+          </div>
+          <div class="case-footer"><button type="button">Accept Case</button></div>
+        </article>
+
+        <article class="case-card row-card" data-status="completed" data-location="kurla">
+          <div class="case-image-wrap small">
+            <span class="badge medium">&#10003; MEDIUM</span>
+            <img src="images/injured dog with ambulance.png" alt="Case preview" />
+          </div>
+          <div class="case-body">
+            <div class="row">
+              <h3>&#128205; Kurla, Mumbai</h3>
+              <span class="time"><span class="dot warn"></span> 12h ago</span>
+            </div>
+            <p>Dog has minor injury and is waiting for volunteer response.</p>
+          </div>
+        </article>
+      </section>
+
+      <aside class="side-panel">
+        <section class="panel">
+          <h4>Quick Links</h4>
+          <a href="#">&#128203; My Active Cases</a>
+          <a href="#">&#9989; Track Reports</a>
+          <a href="login.html">&#128682; Logout</a>
+        </section>
+      </aside>
+    </section>
+  </main>
+  <script>
+    const navItems = document.querySelectorAll(".nav-links a");
+    const filterTabs = document.querySelectorAll(".tabs a");
+    const caseCards = document.querySelectorAll(".cases-grid .case-card");
+
+    navItems.forEach((item) => {
+      item.addEventListener("click", (event) => {
+        event.preventDefault();
+        navItems.forEach((link) => link.classList.remove("active"));
+        item.classList.add("active");
+      });
+    });
+
+    const filterMap = {
+      all: () => true,
+      urgent: (card) => card.dataset.status === "urgent",
+      nearby: (card) => card.dataset.location === "kurla",
+      completed: (card) => card.dataset.status === "completed",
+    };
+
+    filterTabs.forEach((tab) => {
+      tab.addEventListener("click", (event) => {
+        event.preventDefault();
+        filterTabs.forEach((item) => item.classList.remove("active"));
+        tab.classList.add("active");
+
+        const selected = tab.dataset.filter;
+        caseCards.forEach((card) => {
+          const shouldShow = filterMap[selected](card);
+          card.classList.toggle("is-hidden", !shouldShow);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

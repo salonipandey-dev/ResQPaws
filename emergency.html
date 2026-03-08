@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Emergency Report | ResQPaws</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="cssfiles/emergencystyle.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="brand-wrap" aria-label="ResQPaws logo">
+      <span class="brand-icon" aria-hidden="true">&#128062;</span>
+      <h1 class="brand-name"><span class="brand-dark">ResQ</span><span class="brand-accent">Paws</span></h1>
+    </header>
+
+    <section class="hero-copy">
+      <h2>Emergency Report</h2>
+      <p class="sub">Report Injured or Stray Animals Anonymously</p>
+      <p>You don&apos;t need to login or sign up to report animals in need.</p>
+      <p>We&apos;ll notify rescue NGOs near you.</p>
+    </section>
+
+    <section class="steps" aria-label="Report steps">
+      <button class="step" id="uploadPhotoBtn" type="button">
+        <span aria-hidden="true">&#128247;</span>
+        <span id="photoText">Upload Photo</span>
+      </button>
+      <span class="divider" aria-hidden="true">&#8250;</span>
+      <button class="step" id="locationBtn" type="button">
+        <span aria-hidden="true">&#128205;</span>
+        <span id="locationText">Add Location</span>
+      </button>
+      <span class="divider" aria-hidden="true">&#8250;</span>
+      <button class="step" id="urgencyBtn" type="button">
+        <span aria-hidden="true">&#10133;</span>
+        <span id="urgencyText">Select Urgency</span>
+      </button>
+      <input id="photoInput" type="file" accept="image/*" hidden />
+    </section>
+
+    <section class="report-box">
+      <button class="report-btn" id="reportBtn" type="button">Report Animal Now</button>
+      <a href="#" class="track-link">Track Existing Report &#8594;</a>
+    </section>
+
+    <figure class="hero-image">
+      <img src="images/injured dog with ambulance.png" alt="Injured stray dog with person helping" />
+      <figcaption class="heart" aria-hidden="true">&#128657;</figcaption>
+    </figure>
+  </main>
+
+  <p class="toast" id="toast" aria-live="polite"></p>
+  <script src="emergency.js"></script>
+</body>
+</html>

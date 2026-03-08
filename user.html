@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Dashboard | ResQPaws</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="cssfiles/userstyle.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="paw" aria-hidden="true">&#128062;</span>
+      <h1><span class="brand-dark">ResQ</span><span class="brand-accent">Paws</span></h1>
+    </div>
+    <nav class="nav-links" aria-label="User navigation">
+      <a href="#">My Reports</a>
+      <a href="#">Profile</a>
+      <a href="login.html">Logout</a>
+    </nav>
+  </header>
+
+  <main class="dashboard">
+    <section class="feed">
+      <div class="feed-header">
+        <h2>Report Feed</h2>
+        <p>View and track your reported animals.</p>
+      </div>
+
+      <article class="main-card">
+        <div class="thumb">
+          <span class="badge critical">&#9664; CRITICAL</span>
+          <img src="images/injured dog with ambulance.png" alt="Injured dog lying on road" />
+        </div>
+        <div class="main-body">
+          <div class="row">
+            <h3>&#128205; Andheri East, Mumbai</h3>
+            <span class="time"><span class="dot live"></span> Just now</span>
+          </div>
+          <p>Spotted an injured stray dog near the market. Bleeding from the leg and unable to walk.</p>
+          <p class="status-line">
+            <span class="ok">&#9989; Reported</span>
+            <span class="line"></span>
+            <span class="ok bold">&#9989; NGO Accepted</span>
+            <span class="line"></span>
+            <span class="muted">&#9898; On the Way</span>
+            <span class="line"></span>
+            <span class="muted">&#9898; Rescued</span>
+          </p>
+        </div>
+      </article>
+
+      <section class="mini-grid">
+        <article class="mini-card">
+          <div class="thumb small">
+            <span class="badge progress">&#9711; IN PROGRESS</span>
+            <img src="images/injured dog with ambulance.png" alt="Animal rescue report" />
+          </div>
+          <div class="mini-body">
+            <div class="row">
+              <h4>&#128205; Colaba, Mumbai</h4>
+              <span class="time"><span class="dot live"></span> 2h ago</span>
+            </div>
+            <p>Got the injured animal dog</p>
+            <p class="status-line compact">
+              <span class="ok">&#9989; Reported</span>
+              <span class="line"></span>
+              <span class="warn">&#9989; NGO</span>
+              <span class="line"></span>
+              <span class="muted">&#9898; Rescued</span>
+            </p>
+          </div>
+        </article>
+
+        <article class="mini-card">
+          <div class="thumb small rescued-bg">
+            <span class="badge rescued">&#10003; RESCUED</span>
+            <img src="images/injured dog with ambulance.png" alt="Rescued dogs" />
+          </div>
+          <div class="mini-body">
+            <div class="row">
+              <h4>&#128205; Bandra, Mumbai</h4>
+              <span class="time"><span class="dot warn"></span> 1d ago</span>
+            </div>
+            <p>Medical support provided. Dog is now safe.</p>
+            <p class="status-line compact">
+              <span class="ok">&#9989; Reported</span>
+              <span class="line"></span>
+              <span class="ok">&#9989; NGO</span>
+              <span class="line"></span>
+              <span class="ok">&#9989; Rescued</span>
+            </p>
+          </div>
+        </article>
+      </section>
+    </section>
+
+    <aside class="sidebar">
+      <button class="report-btn" type="button">+ Report New Animal</button>
+
+      <section class="panel">
+        <h3>My Reports</h3>
+        <div class="stat"><span class="icon">&#128203;</span><strong>6</strong> <span>Total Reports</span></div>
+        <div class="stat"><span class="icon">&#9989;</span><strong>4</strong> <span>Rescued</span></div>
+        <div class="stat"><span class="icon">&#9203;</span><strong>2</strong> <span>Pending</span></div>
+      </section>
+
+      <section class="panel">
+        <h3>Quick Links</h3>
+        <a class="quick-link" href="#">&#128203; My Active Cases</a>
+        <a class="quick-link" href="#">&#9989; Track Reports</a>
+      </section>
+    </aside>
+  </main>
+</body>
+</html>
