@@ -136,6 +136,10 @@ body {
   overflow: hidden;
 }
 
+#caseList {
+  display: contents;
+}
+
 .case-large {
   grid-column: span 1;
 }

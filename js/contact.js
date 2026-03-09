@@ -1,5 +1,12 @@
 const contactForm = document.getElementById("contactForm");
 const contactToast = document.getElementById("contactToast");
+const emailInput = document.getElementById("email");
+
+const params = new URLSearchParams(window.location.search);
+const emailFromQuery = params.get("email");
+if (emailInput && emailFromQuery) {
+  emailInput.value = emailFromQuery;
+}
 
 if (contactForm && contactToast) {
   contactForm.addEventListener("submit", (event) => {

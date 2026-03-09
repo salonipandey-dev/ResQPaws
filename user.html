@@ -18,7 +18,7 @@
     <nav class="nav-links" aria-label="User navigation">
       <a href="user.html#reports">My Reports</a>
       <a href="about.html">Profile</a>
-      <a href="login.html">Logout</a>
+      <a href="login.html" id="logoutLink">Logout</a>
     </nav>
   </header>
 
@@ -28,73 +28,8 @@
         <h2>Report Feed</h2>
         <p>View and track your reported animals.</p>
       </div>
-
-      <article class="main-card">
-        <div class="thumb">
-          <span class="badge critical">&#9664; CRITICAL</span>
-          <img src="images/injured dog with ambulance.png" alt="Injured dog lying on road" />
-        </div>
-        <div class="main-body">
-          <div class="row">
-            <h3>&#128205; Andheri East, Mumbai</h3>
-            <span class="time"><span class="dot live"></span> Just now</span>
-          </div>
-          <p>Spotted an injured stray dog near the market. Bleeding from the leg and unable to walk.</p>
-          <p class="status-line">
-            <span class="ok">&#9989; Reported</span>
-            <span class="line"></span>
-            <span class="ok bold">&#9989; NGO Accepted</span>
-            <span class="line"></span>
-            <span class="muted">&#9898; On the Way</span>
-            <span class="line"></span>
-            <span class="muted">&#9898; Rescued</span>
-          </p>
-        </div>
-      </article>
-
-      <section class="mini-grid">
-        <article class="mini-card">
-          <div class="thumb small">
-            <span class="badge progress">&#9711; IN PROGRESS</span>
-            <img src="images/injured dog with ambulance.png" alt="Animal rescue report" />
-          </div>
-          <div class="mini-body">
-            <div class="row">
-              <h4>&#128205; Colaba, Mumbai</h4>
-              <span class="time"><span class="dot live"></span> 2h ago</span>
-            </div>
-            <p>Got the injured animal dog</p>
-            <p class="status-line compact">
-              <span class="ok">&#9989; Reported</span>
-              <span class="line"></span>
-              <span class="warn">&#9989; NGO</span>
-              <span class="line"></span>
-              <span class="muted">&#9898; Rescued</span>
-            </p>
-          </div>
-        </article>
-
-        <article class="mini-card">
-          <div class="thumb small rescued-bg">
-            <span class="badge rescued">&#10003; RESCUED</span>
-            <img src="images/injured dog with ambulance.png" alt="Rescued dogs" />
-          </div>
-          <div class="mini-body">
-            <div class="row">
-              <h4>&#128205; Bandra, Mumbai</h4>
-              <span class="time"><span class="dot warn"></span> 1d ago</span>
-            </div>
-            <p>Medical support provided. Dog is now safe.</p>
-            <p class="status-line compact">
-              <span class="ok">&#9989; Reported</span>
-              <span class="line"></span>
-              <span class="ok">&#9989; NGO</span>
-              <span class="line"></span>
-              <span class="ok">&#9989; Rescued</span>
-            </p>
-          </div>
-        </article>
-      </section>
+      <article class="main-card" id="latestReportCard" aria-live="polite"></article>
+      <section class="mini-grid" id="reportList" aria-live="polite"></section>
     </section>
 
     <aside class="sidebar">
@@ -102,9 +37,9 @@
 
       <section class="panel">
         <h3>My Reports</h3>
-        <div class="stat"><span class="icon">&#128203;</span><strong>6</strong> <span>Total Reports</span></div>
-        <div class="stat"><span class="icon">&#9989;</span><strong>4</strong> <span>Rescued</span></div>
-        <div class="stat"><span class="icon">&#9203;</span><strong>2</strong> <span>Pending</span></div>
+        <div class="stat"><span class="icon">&#128203;</span><strong id="totalReports">0</strong> <span>Total Reports</span></div>
+        <div class="stat"><span class="icon">&#9989;</span><strong id="rescuedReports">0</strong> <span>Rescued</span></div>
+        <div class="stat"><span class="icon">&#9203;</span><strong id="pendingReports">0</strong> <span>Pending</span></div>
       </section>
 
       <section class="panel">
@@ -114,6 +49,8 @@
       </section>
     </aside>
   </main>
+  <p id="userToast" class="toast" aria-live="polite"></p>
+  <script src="js/app-state.js"></script>
   <script src="js/user.js"></script>
 </body>
 </html>

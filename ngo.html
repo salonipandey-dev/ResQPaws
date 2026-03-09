@@ -20,6 +20,7 @@
       <a href="#" data-nav="active">Active Cases</a>
       <a href="#" data-nav="completed">Completed</a>
       <a href="#" data-nav="analytics">Analytics</a>
+      <a href="login.html" id="ngoLogout">Logout</a>
     </nav>
   </header>
 
@@ -38,68 +39,8 @@
 
     <section class="content-grid">
       <section class="cases-grid">
-        <article class="case-card case-large" data-status="urgent" data-location="andheri">
-          <div class="case-image-wrap">
-            <span class="badge critical">&#9664; CRITICAL</span>
-            <img src="images/injured dog with ambulance.png" alt="Critical injured dog case" />
-          </div>
-          <div class="case-body">
-            <div class="row">
-              <h3>&#128205; Andheri East, Mumbai</h3>
-              <span class="time"><span class="dot live"></span> Just now</span>
-            </div>
-            <p>Spotted an injured stray dog near market. Bleeding from the leg and unable to walk.</p>
-            <p class="track">
-              <span class="done">&#9989; Reported</span>
-              <span class="line"></span>
-              <span class="done">&#9989; NGO Accepted</span>
-              <span class="line muted"></span>
-            </p>
-          </div>
-          <div class="case-footer">
-            <button type="button">Accept Case</button>
-          </div>
-        </article>
-
-        <article class="case-card" data-status="active" data-location="colaba">
-          <div class="case-image-wrap">
-            <span class="badge progress">&#8853; IN PROGRESS</span>
-            <img src="images/injured dog with ambulance.png" alt="In progress case" />
-          </div>
-          <div class="case-body">
-            <h3>&#128205; Colaba, Mumbai</h3>
-            <p>The hurt animal is unable to move properly.</p>
-            <p class="track"><span class="done">&#9989; NGO Accepted</span><span class="line muted"></span></p>
-          </div>
-          <div class="case-footer"><button type="button">Accept Case</button></div>
-        </article>
-
-        <article class="case-card" data-status="active" data-location="kurla">
-          <div class="case-image-wrap">
-            <span class="badge medium">&#10003; MEDIUM</span>
-            <img src="images/injured dog with ambulance.png" alt="Medium priority case" />
-          </div>
-          <div class="case-body">
-            <h3>&#128205; Kurla, Mumbai</h3>
-            <p>The dog seems weak and needs quick support.</p>
-            <p class="track"><span class="done">&#9989; NGO Accepted</span><span class="line muted"></span></p>
-          </div>
-          <div class="case-footer"><button type="button">Accept Case</button></div>
-        </article>
-
-        <article class="case-card row-card" data-status="completed" data-location="kurla">
-          <div class="case-image-wrap small">
-            <span class="badge medium">&#10003; MEDIUM</span>
-            <img src="images/injured dog with ambulance.png" alt="Case preview" />
-          </div>
-          <div class="case-body">
-            <div class="row">
-              <h3>&#128205; Kurla, Mumbai</h3>
-              <span class="time"><span class="dot warn"></span> 12h ago</span>
-            </div>
-            <p>Dog has minor injury and is waiting for volunteer response.</p>
-          </div>
-        </article>
+        <article class="case-card case-large" id="featuredCase"></article>
+        <div id="caseList"></div>
       </section>
 
       <aside class="side-panel">
@@ -113,6 +54,7 @@
     </section>
   </main>
   <p id="ngoToast" class="toast" aria-live="polite"></p>
+  <script src="js/app-state.js"></script>
   <script src="js/ngo.js"></script>
 </body>
 </html>
