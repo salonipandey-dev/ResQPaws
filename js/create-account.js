@@ -46,6 +46,10 @@ form.addEventListener("submit", (event) => {
       window.location.href = "ngo.html";
       return;
     }
+    if (role.value === "volunteer") {
+      window.location.href = "user.html";
+      return;
+    }
     window.location.href = "user.html";
   }, 700);
 });
