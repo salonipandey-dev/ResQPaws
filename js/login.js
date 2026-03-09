@@ -19,10 +19,6 @@ function showMessage(message) {
 }
 
 function redirectByRole(role) {
-  if (role === "admin") {
-    window.location.href = "admin.html";
-    return;
-  }
   if (role === "ngo") {
     window.location.href = "ngo.html";
     return;

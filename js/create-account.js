@@ -23,10 +23,6 @@ function normalizeEmail(value) {
 }
 
 function goToRolePage(selectedRole) {
-  if (selectedRole === "admin") {
-    window.location.href = "admin.html";
-    return;
-  }
   if (selectedRole === "ngo") {
     window.location.href = "ngo.html";
     return;

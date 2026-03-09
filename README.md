@@ -1,69 +1,51 @@
-🐾 ResQPaws
-ResQPaws is a simple, empathetic web platform designed to help injured, sick, or abandoned animals get help faster by connecting people with nearby support.
+﻿# ResQPaws Frontend (React + Tailwind)
 
-Animals in distress often go unnoticed or help arrives too late—not because people don’t care, but because there is no clear, simple way to report and act.
-ResQPaws aims to bridge that gap.
+This repository now includes a production-ready frontend foundation using React, Vite, and Tailwind CSS.
 
-🌱 Project Purpose
-ResQPaws was built with one core idea:
+## Run Locally
 
-They can’t ask for help. We can.
+1. Install Node.js LTS (v18+ recommended).
+2. Install dependencies:
 
-The platform focuses on turning concern into action by providing a centralized space where users can:
+```bash
+npm install
+```
 
-Learn about the mission
-Join the platform as a “hero”
-Understand how reporting and rescue works
-This project is currently focused on the frontend experience, with an emphasis on clarity, empathy, and accessibility.
+3. Start development server:
 
-✨ Features
-Minimalist and empathetic UI
-Clear navigation with a simple user flow
-Informative About page explaining the mission and process
-Responsive layout basics
-Subtle animations for a calm, welcoming experience
-🛠️ Tech Stack
-HTML5 – Semantic structure
-CSS3 – Custom styling, animations, and layout
-No frameworks – Built from scratch for learning purposes
-📁 Project Structure
-resqpaws/ │ ├── index.html # Home page ├── about.html # About page ├── indexstyle.css # Styles for home page ├── aboutstyle.css # Styles for about page └── README.md # Project documentation
+```bash
+npm run dev
+```
 
-🚀 How to Run Locally
-Clone the repository:
+4. Build for production:
 
+```bash
+npm run build
+```
 
-Open the project folder.
+## Implemented Frontend Modules
 
-Open index.html in any modern web browser.
+- Role-based auth UI: User, NGO, Volunteer
+- Signup, login, forgot/reset password flow
+- Emergency report submission with:
+  - condition, details, media upload fields
+  - language selector
+  - location capture hook
+  - AI severity + first-aid helper (frontend heuristic)
+  - duplicate-report warning
+- User dashboard:
+  - report status tracking
+  - rewards, badges, and shareable impact text
+- NGO dashboard:
+  - urgent/nearby/completed filters
+  - status progression: Reported -> Verified -> Accepted -> On the Way -> Rescued -> Closed
 
-No additional setup required.
+## Demo Accounts
 
-🔮 Future Improvements
+- User: `user@resqpaws.org` / `password123`
+- NGO: `ngo@resqpaws.org` / `password123`
 
-Login and signup functionality
+## Notes
 
-Animal reporting form
-
-Backend integration
-
-Location-based reporting
-
-NGO and volunteer dashboards
-
-Mobile-first responsiveness
-
-🤍 Design Philosophy
-
-ResQPaws follows an empathetic and minimal design approach:
-
-Soft colors and spacing to reduce stress
-
-No flashy UI elements
-
-Focus on trust, care, and clarity
-
-The goal is to make users feel safe, calm, and encouraged to help.
-
-
-Built as a student project to explore frontend development while working on a meaningful real-world problem.
+- Data is persisted in browser `localStorage` via service layer (`src/services/storage.js`).
+- Map/API/AI integrations are prepared as frontend hooks and can be wired to backend services next.
