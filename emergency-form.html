@@ -57,8 +57,23 @@
 
         <p class="hint">Assess the urgency of the situation.</p>
 
+        <label class="field-inline" for="reportLanguage">
+          <span>Report Language</span>
+          <select id="reportLanguage">
+            <option value="en">English</option>
+            <option value="hi">Hindi</option>
+            <option value="mr">Marathi</option>
+            <option value="ta">Tamil</option>
+          </select>
+        </label>
+
         <label class="sr-only" for="reportDetails">Report details</label>
         <textarea id="reportDetails" rows="2" placeholder="Describe the animal's condition and location."></textarea>
+        <p class="severity-box" id="severityText">AI Severity Prediction: Waiting for details...</p>
+        <div class="aid-box" id="firstAidBox">
+          <h4>AI First-Aid Assistant</h4>
+          <p id="firstAidText">Add details above to get immediate basic first-aid guidance.</p>
+        </div>
 
         <button class="submit-btn" type="submit">Submit Report</button>
       </form>

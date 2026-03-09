@@ -6,9 +6,13 @@ const locationBtn = document.getElementById("locationBtn");
 const locationText = document.getElementById("locationText");
 const urgencyButtons = document.querySelectorAll(".urgency-btn");
 const details = document.getElementById("reportDetails");
+const reportLanguage = document.getElementById("reportLanguage");
+const severityText = document.getElementById("severityText");
+const firstAidText = document.getElementById("firstAidText");
 const toast = document.getElementById("toast");
 
 const draftKey = "resq_report_draft";
+const rewardKey = "resq_rewards";
 const draft = JSON.parse(localStorage.getItem(draftKey) || "{}");
 const session = window.ResQState ? ResQState.getSession() : null;
 
@@ -32,6 +36,9 @@ function hydrateDraft() {
   if (draft.location && locationText) {
     locationText.textContent = draft.location;
   }
+  if (reportLanguage && draft.language) {
+    reportLanguage.value = draft.language;
+  }
 
   urgencyButtons.forEach((item) => {
     const active = item.dataset.level === selectedUrgency;
@@ -40,7 +47,96 @@ function hydrateDraft() {
   });
 }
 
+function setUrgency(level) {
+  selectedUrgency = level;
+  draft.urgency = level;
+  localStorage.setItem(draftKey, JSON.stringify(draft));
+
+  urgencyButtons.forEach((item) => {
+    const active = item.dataset.level === selectedUrgency;
+    item.classList.toggle("active", active);
+    item.setAttribute("aria-checked", active ? "true" : "false");
+  });
+}
+
+function detectSeverity(text) {
+  const lower = text.toLowerCase();
+  const criticalWords = ["bleeding", "blood", "fracture", "hit", "accident", "unconscious"];
+  const urgentWords = ["limping", "weak", "wound", "injured", "pain", "crying"];
+
+  if (criticalWords.some((word) => lower.includes(word))) {
+    return {
+      level: "critical",
+      label: "Critical",
+      aid: "Keep distance, avoid force-moving the animal, call nearest NGO immediately, and control external bleeding only if safe."
+    };
+  }
+
+  if (urgentWords.some((word) => lower.includes(word))) {
+    return {
+      level: "urgent",
+      label: "Urgent",
+      aid: "Keep area calm, provide shade/water if safe, avoid feeding unknown medication, and wait for responder guidance."
+    };
+  }
+
+  return {
+    level: "regular",
+    label: "Regular",
+    aid: "Observe from safe distance, share clear location and photo, and monitor for worsening condition."
+  };
+}
+
+function updateAiGuidance() {
+  if (!details) return;
+  const prediction = detectSeverity(details.value.trim());
+  if (severityText) {
+    severityText.textContent = `AI Severity Prediction: ${prediction.label}`;
+  }
+  if (firstAidText) {
+    firstAidText.textContent = prediction.aid;
+  }
+
+  if (!draft.urgency) {
+    setUrgency(prediction.level);
+  }
+}
+
+function normalizeText(text) {
+  return text.trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+function isLikelyDuplicate(reports, location, text) {
+  const normalizedLocation = normalizeText(location);
+  const normalizedText = normalizeText(text).slice(0, 40);
+  const oneHourMs = 60 * 60 * 1000;
+
+  return reports.some((report) => {
+    const timeGap = Date.now() - new Date(report.createdAt).getTime();
+    const similarLocation = normalizeText(report.location || "") === normalizedLocation;
+    const similarText = normalizeText(report.details || "").slice(0, 40) === normalizedText;
+    return timeGap <= oneHourMs && similarLocation && similarText;
+  });
+}
+
+function addRewards() {
+  if (!session || !session.email) return;
+
+  const rewards = JSON.parse(localStorage.getItem(rewardKey) || "{}");
+  const current = rewards[session.email] || { points: 0, reports: 0, badge: "Bronze" };
+  current.points += 10;
+  current.reports += 1;
+
+  if (current.points >= 200) current.badge = "Platinum";
+  else if (current.points >= 120) current.badge = "Gold";
+  else if (current.points >= 60) current.badge = "Silver";
+
+  rewards[session.email] = current;
+  localStorage.setItem(rewardKey, JSON.stringify(rewards));
+}
+
 hydrateDraft();
+updateAiGuidance();
 
 if (uploadPhotoBtn && photoInput) {
   uploadPhotoBtn.addEventListener("click", () => photoInput.click());
@@ -104,19 +200,20 @@ if (locationBtn) {
 
 urgencyButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    selectedUrgency = button.dataset.level;
-    draft.urgency = selectedUrgency;
-    localStorage.setItem(draftKey, JSON.stringify(draft));
-
-    urgencyButtons.forEach((item) => {
-      item.classList.remove("active");
-      item.setAttribute("aria-checked", "false");
-    });
-
-    button.classList.add("active");
-    button.setAttribute("aria-checked", "true");
+    setUrgency(button.dataset.level);
   });
 });
+
+if (reportLanguage) {
+  reportLanguage.addEventListener("change", () => {
+    draft.language = reportLanguage.value;
+    localStorage.setItem(draftKey, JSON.stringify(draft));
+  });
+}
+
+if (details) {
+  details.addEventListener("input", updateAiGuidance);
+}
 
 if (form) {
   form.addEventListener("submit", (event) => {
@@ -142,10 +239,21 @@ if (form) {
       return;
     }
 
+    const allReports = ResQState.getReports();
+    const duplicate = isLikelyDuplicate(allReports, draft.location || "", details.value.trim());
+    if (duplicate) {
+      const proceed = confirm("A similar report was recently filed at this location. Submit anyway?");
+      if (!proceed) {
+        showToast("Potential duplicate avoided.");
+        return;
+      }
+    }
+
     const report = ResQState.createReport({
       urgency: selectedUrgency,
       location: draft.location || "Not provided",
       details: details.value.trim(),
+      language: reportLanguage ? reportLanguage.value : "en",
       imageName: draft.imageName || "",
       status: "reported",
       createdBy: {
@@ -154,6 +262,7 @@ if (form) {
       }
     });
 
+    addRewards();
     localStorage.removeItem(draftKey);
     showToast(`Report submitted: ${report.id}`);
 

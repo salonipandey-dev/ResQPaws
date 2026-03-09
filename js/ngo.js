@@ -34,31 +34,37 @@ function badgeForUrgency(urgency) {
 }
 
 function nextStatus(status) {
-  if (status === "reported") return "accepted";
+  if (status === "reported") return "verified";
+  if (status === "verified") return "accepted";
   if (status === "accepted") return "on_the_way";
   if (status === "on_the_way") return "rescued";
-  return "rescued";
+  if (status === "rescued") return "closed";
+  return "closed";
 }
 
 function statusLabel(status) {
-  if (status === "reported") return "Accept Case";
+  if (status === "reported") return "Verify Case";
+  if (status === "verified") return "Accept Case";
   if (status === "accepted") return "Mark On The Way";
   if (status === "on_the_way") return "Mark Rescued";
+  if (status === "rescued") return "Close Case";
   return "Completed";
 }
 
 function trackText(status) {
   if (status === "reported") return "Reported, waiting for NGO acceptance.";
+  if (status === "verified") return "Case verified with media/location details.";
   if (status === "accepted") return "NGO accepted and preparing response.";
   if (status === "on_the_way") return "Rescue team is on the way.";
-  return "Animal rescued and case completed.";
+  if (status === "rescued") return "Animal rescued. Pending closure formalities.";
+  return "Case closed with final status log.";
 }
 
 function isVisible(report) {
   if (currentFilter === "all") return true;
   if (currentFilter === "urgent") return report.urgency === "urgent" || report.urgency === "critical";
   if (currentFilter === "nearby") return (report.location || "").toLowerCase().includes("mumbai");
-  if (currentFilter === "completed") return report.status === "rescued";
+  if (currentFilter === "completed") return report.status === "rescued" || report.status === "closed";
   return true;
 }
 
@@ -83,7 +89,7 @@ function renderCaseContent(report, isLarge) {
       <p class="track"><span class="done">ID: ${report.id}</span><span class="line muted"></span><span>${trackText(report.status)}</span></p>
     </div>
     <div class="case-footer">
-      <button type="button" data-action="progress" data-id="${report.id}" ${report.status === "rescued" ? "disabled" : ""}>${statusLabel(report.status)}</button>
+      <button type="button" data-action="progress" data-id="${report.id}" ${report.status === "closed" ? "disabled" : ""}>${statusLabel(report.status)}</button>
     </div>
   `;
 }

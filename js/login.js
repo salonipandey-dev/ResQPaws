@@ -19,7 +19,15 @@ function showMessage(message) {
 }
 
 function redirectByRole(role) {
+  if (role === "admin") {
+    window.location.href = "admin.html";
+    return;
+  }
   if (role === "ngo") {
+    window.location.href = "ngo.html";
+    return;
+  }
+  if (role === "volunteer") {
     window.location.href = "ngo.html";
     return;
   }
@@ -72,10 +80,15 @@ if (loginForm) {
       return;
     }
 
+    if (selectedRole !== "user") {
+      showMessage("Authorized account required for this role.");
+      return;
+    }
+
     if (window.ResQState) {
       ResQState.setSession({ name: "Guest User", email, role: selectedRole });
     }
-    showMessage("No account found. Continuing as guest.");
+    showMessage("No account found. Continuing as guest user.");
     setTimeout(() => redirectByRole(selectedRole), 600);
   });
 }

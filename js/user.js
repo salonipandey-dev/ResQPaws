@@ -6,6 +6,10 @@ const rescuedReports = document.getElementById("rescuedReports");
 const pendingReports = document.getElementById("pendingReports");
 const logoutLink = document.getElementById("logoutLink");
 const userToast = document.getElementById("userToast");
+const rewardPoints = document.getElementById("rewardPoints");
+const rewardBadge = document.getElementById("rewardBadge");
+const shareLinkedIn = document.getElementById("shareLinkedIn");
+const shareWhatsApp = document.getElementById("shareWhatsApp");
 
 let toastTimer = null;
 
@@ -36,14 +40,14 @@ function displayUrgencyBadge(urgency) {
 
 function statusTrail(status) {
   const current = status || "reported";
-  const states = ["reported", "accepted", "on_the_way", "rescued"];
+  const states = ["reported", "verified", "accepted", "on_the_way", "rescued", "closed"];
   const currentIndex = states.indexOf(current);
 
   function marker(index, label) {
     return index <= currentIndex ? `<span class="ok">&#9989; ${label}</span>` : `<span class="muted">&#9898; ${label}</span>`;
   }
 
-  return `${marker(0, "Reported")}<span class="line"></span>${marker(1, "NGO Accepted")}<span class="line"></span>${marker(2, "On the Way")}<span class="line"></span>${marker(3, "Rescued")}`;
+  return `${marker(0, "Reported")}<span class="line"></span>${marker(1, "Verified")}<span class="line"></span>${marker(2, "Accepted")}<span class="line"></span>${marker(3, "On the Way")}<span class="line"></span>${marker(4, "Rescued")}<span class="line"></span>${marker(5, "Closed")}`;
 }
 
 function renderLatest(report) {
@@ -107,7 +111,7 @@ function renderList(reports) {
 
 function updateStats(reports) {
   if (!totalReports || !rescuedReports || !pendingReports) return;
-  const rescued = reports.filter((report) => report.status === "rescued").length;
+  const rescued = reports.filter((report) => report.status === "rescued" || report.status === "closed").length;
   totalReports.textContent = String(reports.length);
   rescuedReports.textContent = String(rescued);
   pendingReports.textContent = String(reports.length - rescued);
@@ -136,6 +140,41 @@ function renderDashboard() {
   updateStats(reports);
 }
 
+function renderRewards() {
+  if (!rewardPoints || !rewardBadge || !window.ResQState) return;
+  const session = ResQState.getSession();
+  const rewards = JSON.parse(localStorage.getItem("resq_rewards") || "{}");
+  const current = session && session.email ? rewards[session.email] : null;
+
+  rewardPoints.textContent = String(current ? current.points : 0);
+  rewardBadge.textContent = current ? current.badge : "Bronze";
+}
+
+function wireShareActions() {
+  const summary = `I am contributing to animal rescue on ResQPaws. Join the mission to help injured stray animals.`;
+
+  if (shareLinkedIn) {
+    shareLinkedIn.addEventListener("click", (event) => {
+      event.preventDefault();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(summary).then(() => {
+          showToast("Impact text copied for LinkedIn.");
+        });
+      } else {
+        showToast("Copy not supported. Share manually.");
+      }
+    });
+  }
+
+  if (shareWhatsApp) {
+    shareWhatsApp.addEventListener("click", (event) => {
+      event.preventDefault();
+      const encoded = encodeURIComponent(summary);
+      window.open(`https://wa.me/?text=${encoded}`, "_blank");
+    });
+  }
+}
+
 if (reportNewBtn) {
   reportNewBtn.addEventListener("click", () => {
     window.location.href = "emergency.html";
@@ -151,6 +190,8 @@ if (logoutLink) {
 }
 
 renderDashboard();
+renderRewards();
+wireShareActions();
 
 const params = new URLSearchParams(window.location.search);
 if (params.get("new") === "1") {

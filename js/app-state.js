@@ -42,7 +42,29 @@
   }
 
   function getReports() {
-    return safeParse(localStorage.getItem(KEYS.reports), []);
+    const raw = safeParse(localStorage.getItem(KEYS.reports), []);
+    if (Array.isArray(raw)) {
+      return raw;
+    }
+
+    if (raw && typeof raw === "object") {
+      return Object.entries(raw).map(([id, value]) => ({
+        id,
+        createdAt: new Date().toISOString(),
+        status: "reported",
+        urgency: "medium",
+        location: "Not shared",
+        details: "",
+        imageName: "",
+        createdBy: {
+          name: "Anonymous Reporter",
+          email: ""
+        },
+        ...value
+      }));
+    }
+
+    return [];
   }
 
   function saveReports(reports) {
