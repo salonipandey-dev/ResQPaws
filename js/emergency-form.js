@@ -216,7 +216,7 @@ if (details) {
 }
 
 if (form) {
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     if (!photoAdded) {
@@ -249,7 +249,7 @@ if (form) {
       }
     }
 
-    const report = ResQState.createReport({
+    const localReportPayload = {
       urgency: selectedUrgency,
       location: draft.location || "Not provided",
       details: details.value.trim(),
@@ -260,8 +260,53 @@ if (form) {
         name: session && session.name ? session.name : "Anonymous Reporter",
         email: session && session.email ? session.email : ""
       }
-    });
+    };
 
+    if (window.ResQApi && session && session.token) {
+      try {
+        const urgencyMap = { regular: "low", urgent: "high", critical: "critical" };
+        const formData = new FormData();
+        formData.append("animalType", "dog");
+        formData.append("description", details.value.trim());
+        formData.append("urgencyLevel", urgencyMap[selectedUrgency] || "medium");
+
+        const rawLocation = (draft.location || "").trim();
+        const coordMatch = rawLocation.match(/^(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)$/);
+        const latitude = coordMatch ? coordMatch[1] : "19.0760";
+        const longitude = coordMatch ? coordMatch[2] : "72.8777";
+
+        formData.append("latitude", latitude);
+        formData.append("longitude", longitude);
+        formData.append("address", rawLocation || "Location shared by reporter");
+        formData.append("city", "Mumbai");
+        formData.append("conditionTags", JSON.stringify([selectedUrgency]));
+        formData.append("originalLanguage", reportLanguage ? reportLanguage.value : "en");
+
+        if (photoInput && photoInput.files && photoInput.files[0]) {
+          formData.append("media", photoInput.files[0]);
+        }
+
+        const response = await ResQApi.request("/cases", { method: "POST", body: formData });
+        const apiCase = response && response.data ? response.data : null;
+
+        localReportPayload.id = apiCase && apiCase.caseId ? apiCase.caseId : undefined;
+        localReportPayload.backendId = apiCase && apiCase._id ? apiCase._id : undefined;
+
+        const report = ResQState.createReport(localReportPayload);
+        addRewards();
+        localStorage.removeItem(draftKey);
+        showToast(`Report submitted: ${report.id}`);
+
+        setTimeout(() => {
+          window.location.href = session ? "user.html?new=1" : "index.html";
+        }, 900);
+        return;
+      } catch (error) {
+        showToast(error.message || "Online submission failed. Saved offline.");
+      }
+    }
+
+    const report = ResQState.createReport(localReportPayload);
     addRewards();
     localStorage.removeItem(draftKey);
     showToast(`Report submitted: ${report.id}`);

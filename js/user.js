@@ -1,4 +1,4 @@
-﻿const reportNewBtn = document.getElementById("reportNewBtn");
+const reportNewBtn = document.getElementById("reportNewBtn");
 const latestReportCard = document.getElementById("latestReportCard");
 const reportList = document.getElementById("reportList");
 const totalReports = document.getElementById("totalReports");
@@ -34,7 +34,7 @@ function humanTime(dateString) {
 
 function displayUrgencyBadge(urgency) {
   if (urgency === "critical") return { css: "critical", text: "CRITICAL" };
-  if (urgency === "urgent") return { css: "progress", text: "URGENT" };
+  if (urgency === "urgent" || urgency === "high") return { css: "progress", text: "URGENT" };
   return { css: "rescued", text: urgency.toUpperCase() };
 }
 
@@ -117,14 +117,27 @@ function updateStats(reports) {
   pendingReports.textContent = String(reports.length - rescued);
 }
 
-function getUserReports() {
+async function getUserReports() {
   if (!window.ResQState) return [];
   const session = ResQState.getSession();
+
   const allReports = ResQState.getReports();
 
-  if (!session || !session.email) {
-    return allReports;
+  if (window.ResQApi && session && session.token) {
+    try {
+      const response = await ResQApi.request("/cases");
+      const remoteReports = (response.data || []).map(ResQApi.mapCase);
+      const seen = new Set(remoteReports.map((report) => report.id));
+      const localOnly = allReports.filter((report) => !seen.has(report.id));
+      return [...remoteReports, ...localOnly].sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+    } catch (error) {
+      showToast(error.message || "Could not sync with backend. Showing local reports.");
+    }
   }
+
+  if (!session || !session.email) return allReports;
 
   const own = allReports.filter(
     (report) => report.createdBy && report.createdBy.email && report.createdBy.email === session.email
@@ -133,8 +146,8 @@ function getUserReports() {
   return own.length > 0 ? own : allReports;
 }
 
-function renderDashboard() {
-  const reports = getUserReports();
+async function renderDashboard() {
+  const reports = await getUserReports();
   renderLatest(reports[0]);
   renderList(reports);
   updateStats(reports);

@@ -1,4 +1,4 @@
-﻿const navItems = document.querySelectorAll(".nav-links a[data-nav]");
+const navItems = document.querySelectorAll(".nav-links a[data-nav]");
 const filterTabs = document.querySelectorAll(".tabs a");
 const featuredCase = document.getElementById("featuredCase");
 const caseList = document.getElementById("caseList");
@@ -7,6 +7,7 @@ const ngoLogout = document.getElementById("ngoLogout");
 
 let currentFilter = "all";
 let toastTimer = null;
+let caseCache = [];
 
 function showNgoToast(message) {
   if (!ngoToast) return;
@@ -29,7 +30,7 @@ function humanTime(dateString) {
 
 function badgeForUrgency(urgency) {
   if (urgency === "critical") return { css: "critical", text: "CRITICAL" };
-  if (urgency === "urgent") return { css: "progress", text: "URGENT" };
+  if (urgency === "urgent" || urgency === "high") return { css: "progress", text: "URGENT" };
   return { css: "medium", text: urgency.toUpperCase() };
 }
 
@@ -69,8 +70,7 @@ function isVisible(report) {
 }
 
 function getReports() {
-  if (!window.ResQState) return [];
-  return ResQState.getReports().filter((report) => isVisible(report));
+  return caseCache.filter((report) => isVisible(report));
 }
 
 function renderCaseContent(report, isLarge) {
@@ -106,15 +106,13 @@ function renderCases() {
   }
 
   featuredCase.innerHTML = renderCaseContent(reports[0], true);
-  featuredCase.dataset.id = reports[0].id;
-  featuredCase.dataset.status = reports[0].status;
 
   const rest = reports
     .slice(1)
     .map((report, index) => {
       const rowClass = index % 3 === 2 ? " row-card" : "";
       return `
-        <article class="case-card${rowClass}" data-id="${report.id}" data-status="${report.status}">
+        <article class="case-card${rowClass}">
           ${renderCaseContent(report, false)}
         </article>
       `;
@@ -126,24 +124,70 @@ function renderCases() {
   bindCaseActions();
 }
 
+async function updateStatus(report, status) {
+  if (window.ResQApi && report.backendId) {
+    try {
+      await ResQApi.request(`/cases/${report.backendId}/status`, {
+        method: "PATCH",
+        body: JSON.stringify({ status })
+      });
+      if (window.ResQState) {
+        ResQState.updateReport(report.id, { status });
+      }
+      return true;
+    } catch (error) {
+      showNgoToast(error.message || "Status update failed on backend. Updated locally.");
+    }
+  }
+
+  if (window.ResQState) {
+    ResQState.updateReport(report.id, { status });
+  }
+  return true;
+}
+
 function bindCaseActions() {
   const buttons = document.querySelectorAll("button[data-action='progress']");
   buttons.forEach((button) => {
-    button.addEventListener("click", () => {
+    button.addEventListener("click", async () => {
       const reportId = button.dataset.id;
-      if (!reportId || !window.ResQState) return;
+      if (!reportId) return;
 
-      const reports = ResQState.getReports();
-      const report = reports.find((item) => item.id === reportId);
+      const report = caseCache.find((item) => item.id === reportId);
       if (!report) return;
 
-      const updated = ResQState.updateReport(reportId, { status: nextStatus(report.status) });
-      if (updated) {
-        showNgoToast(`Case ${updated.id} moved to ${updated.status.replaceAll("_", " ")}.`);
+      const status = nextStatus(report.status);
+      const ok = await updateStatus(report, status);
+      if (ok) {
+        report.status = status;
+        showNgoToast(`Case ${report.id} moved to ${status.replaceAll("_", " ")}.`);
+        renderCases();
       }
-      renderCases();
     });
   });
+}
+
+async function loadCases() {
+  if (window.ResQApi && window.ResQState) {
+    const session = ResQState.getSession();
+    if (session && session.token) {
+      try {
+        const response = await ResQApi.request("/cases");
+        const remote = (response.data || []).map(ResQApi.mapCase);
+        const local = ResQState.getReports();
+        const seen = new Set(remote.map((item) => item.id));
+        caseCache = [...remote, ...local.filter((item) => !seen.has(item.id))]
+          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        renderCases();
+        return;
+      } catch (error) {
+        showNgoToast(error.message || "Could not load backend cases. Showing local data.");
+      }
+    }
+  }
+
+  caseCache = window.ResQState ? ResQState.getReports() : [];
+  renderCases();
 }
 
 navItems.forEach((item) => {
@@ -172,4 +216,4 @@ if (ngoLogout) {
   });
 }
 
-renderCases();
+loadCases();

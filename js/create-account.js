@@ -1,4 +1,4 @@
-﻿const form = document.getElementById("createAccountForm");
+const form = document.getElementById("createAccountForm");
 const fullName = document.getElementById("fullName");
 const email = document.getElementById("email");
 const phone = document.getElementById("phone");
@@ -23,74 +23,104 @@ function normalizeEmail(value) {
 }
 
 function goToRolePage(selectedRole) {
-  if (selectedRole === "ngo") {
-    window.location.href = "ngo.html";
-    return;
-  }
-  if (selectedRole === "volunteer") {
+  if (selectedRole === "ngo" || selectedRole === "volunteer") {
     window.location.href = "ngo.html";
     return;
   }
   window.location.href = "user.html";
 }
 
-form.addEventListener("submit", (event) => {
-  event.preventDefault();
+if (form) {
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-  const nameValue = fullName.value.trim();
-  const emailValue = normalizeEmail(email.value);
-  const phoneValue = phone.value.trim();
-  const roleValue = role.value;
+    const nameValue = fullName.value.trim();
+    const emailValue = normalizeEmail(email.value);
+    const phoneValue = phone.value.trim();
+    const roleValue = role.value;
 
-  if (!nameValue || !emailValue || !phoneValue || !roleValue) {
-    showToast("Please fill all required fields.");
-    return;
-  }
+    if (!nameValue || !emailValue || !phoneValue || !roleValue) {
+      showToast("Please fill all required fields.");
+      return;
+    }
 
-  if (!/^[0-9+\-\s]{8,15}$/.test(phoneValue)) {
-    showToast("Enter a valid phone number.");
-    return;
-  }
+    if (!/^[0-9+\-\s]{8,15}$/.test(phoneValue)) {
+      showToast("Enter a valid phone number.");
+      return;
+    }
 
-  if (password.value.length < 6) {
-    showToast("Password must be at least 6 characters.");
-    return;
-  }
+    if (password.value.length < 6) {
+      showToast("Password must be at least 6 characters.");
+      return;
+    }
 
-  if (password.value !== confirmPassword.value) {
-    showToast("Passwords do not match.");
-    return;
-  }
+    if (password.value !== confirmPassword.value) {
+      showToast("Passwords do not match.");
+      return;
+    }
 
-  if (!terms.checked) {
-    showToast("Please accept terms and privacy policy.");
-    return;
-  }
+    if (!terms.checked) {
+      showToast("Please accept terms and privacy policy.");
+      return;
+    }
 
-  const users = window.ResQState ? ResQState.getUsers() : [];
-  const exists = users.some((user) => user.email === emailValue);
-  if (exists) {
-    showToast("An account with this email already exists.");
-    return;
-  }
+    if (window.ResQApi) {
+      try {
+        const payload = await ResQApi.request("/auth/register", {
+          method: "POST",
+          body: JSON.stringify({
+            name: nameValue,
+            email: emailValue,
+            phone: phoneValue,
+            password: password.value,
+            role: ResQApi.frontendRoleToApi(roleValue)
+          })
+        });
 
-  users.push({
-    name: nameValue,
-    email: emailValue,
-    phone: phoneValue,
-    role: roleValue,
-    password: password.value,
-    createdAt: new Date().toISOString()
+        if (window.ResQState) {
+          const user = payload.user || {};
+          ResQState.setSession({
+            name: user.name || nameValue,
+            email: user.email || emailValue,
+            role: ResQApi.apiRoleToFrontend(user.role || ResQApi.frontendRoleToApi(roleValue)),
+            token: payload.token,
+            userId: user._id || user.id || ""
+          });
+        }
+
+        showToast("Account created successfully.");
+        setTimeout(() => goToRolePage(roleValue), 700);
+        return;
+      } catch (error) {
+        showToast(error.message || "Online signup failed. Using offline mode.");
+      }
+    }
+
+    const users = window.ResQState ? ResQState.getUsers() : [];
+    const exists = users.some((user) => user.email === emailValue);
+    if (exists) {
+      showToast("An account with this email already exists.");
+      return;
+    }
+
+    users.push({
+      name: nameValue,
+      email: emailValue,
+      phone: phoneValue,
+      role: roleValue,
+      password: password.value,
+      createdAt: new Date().toISOString()
+    });
+
+    if (window.ResQState) {
+      ResQState.saveUsers(users);
+      ResQState.setSession({ name: nameValue, email: emailValue, role: roleValue });
+    }
+
+    showToast("Account created successfully (offline mode).");
+
+    setTimeout(() => {
+      goToRolePage(roleValue);
+    }, 700);
   });
-
-  if (window.ResQState) {
-    ResQState.saveUsers(users);
-    ResQState.setSession({ name: nameValue, email: emailValue, role: roleValue });
-  }
-
-  showToast("Account created successfully.");
-
-  setTimeout(() => {
-    goToRolePage(roleValue);
-  }, 700);
-});
+}
