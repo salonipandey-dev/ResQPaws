@@ -1,11 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { body, validationResult } = require("express-validator");
+const { body, query, validationResult } = require("express-validator");
 const RescueCase = require("../models/RescueCase");
 const { protect, authorize, requireVerified } = require("../middleware/auth");
 const { uploadCaseMedia } = require("../config/cloudinary");
 const { handleCaseReported, handleCaseRescued, penalizeFakeReport } = require("../utils/gamification");
 
+// Valid status transitions
 const STATUS_TRANSITIONS = {
   reported: ["verified", "rejected"],
   verified: ["accepted", "rejected"],
@@ -16,6 +17,7 @@ const STATUS_TRANSITIONS = {
   rejected: [],
 };
 
+// ─── POST /api/cases ───────────────────────────────
 router.post(
   "/",
   protect,
@@ -24,8 +26,8 @@ router.post(
     body("animalType").isIn(["dog", "cat", "bird", "cow", "monkey", "reptile", "other"]),
     body("description").trim().isLength({ min: 10, max: 1000 }),
     body("urgencyLevel").optional().isIn(["low", "medium", "high", "critical"]),
-    body("latitude").isFloat({ min: -90, max: 90 }).withMessage("Valid latitude required"),
-    body("longitude").isFloat({ min: -180, max: 180 }).withMessage("Valid longitude required"),
+    body("latitude").isFloat({ min: -90, max: 90 }),
+    body("longitude").isFloat({ min: -180, max: 180 }),
   ],
   async (req, res, next) => {
     try {
@@ -74,7 +76,13 @@ router.post(
         state,
         media,
         originalLanguage: originalLanguage || "en",
-        statusLog: [{ status: "reported", changedBy: req.user._id, note: "Case reported" }],
+        statusLog: [
+          {
+            status: "reported",
+            changedBy: req.user._id,
+            note: "Case reported",
+          },
+        ],
       });
 
       await handleCaseReported(req.user._id, rescueCase._id);
@@ -90,6 +98,7 @@ router.post(
   }
 );
 
+// ─── GET /api/cases ────────────────────────────────
 router.get("/", protect, async (req, res, next) => {
   try {
     const {
@@ -111,7 +120,10 @@ router.get("/", protect, async (req, res, next) => {
     if (req.user.role === "citizen") {
       filter.reportedBy = req.user._id;
     } else if (req.user.role === "volunteer") {
-      filter.$or = [{ assignedTo: req.user._id }, { status: { $in: ["verified", "accepted"] } }];
+      filter.$or = [
+        { assignedTo: req.user._id },
+        { status: { $in: ["verified", "accepted"] } },
+      ];
     }
 
     if (status) filter.status = status;
@@ -123,16 +135,20 @@ router.get("/", protect, async (req, res, next) => {
     if (lat && lng && radius) {
       filter.location = {
         $near: {
-          $geometry: { type: "Point", coordinates: [parseFloat(lng), parseFloat(lat)] },
+          $geometry: {
+            type: "Point",
+            coordinates: [parseFloat(lng), parseFloat(lat)],
+          },
           $maxDistance: parseFloat(radius) * 1000,
         },
       };
     }
 
     const skip = (parseInt(page) - 1) * parseInt(limit);
+
     const [cases, total] = await Promise.all([
       RescueCase.find(filter)
-        .populate("reportedBy", "name email avatar role trustScore")
+        .populate("reportedBy", "name avatar role trustScore")
         .populate("assignedTo", "name avatar role organizationName")
         .sort(sort)
         .skip(skip)
@@ -152,6 +168,7 @@ router.get("/", protect, async (req, res, next) => {
   }
 });
 
+// ─── GET /api/cases/nearby ───────────────────────── Cases near a coordinate
 router.get("/nearby", protect, async (req, res, next) => {
   try {
     const { lat, lng, radius = 5 } = req.query;
@@ -169,6 +186,7 @@ router.get("/nearby", protect, async (req, res, next) => {
       status: { $nin: ["closed", "rejected"] },
     })
       .populate("reportedBy", "name email avatar")
+      .populate("reportedBy", "name avatar")
       .limit(50);
 
     res.json({ success: true, count: cases.length, data: cases });
@@ -177,6 +195,7 @@ router.get("/nearby", protect, async (req, res, next) => {
   }
 });
 
+// ─── GET /api/cases/:id ─────────────────────────── Get single case
 router.get("/:id", protect, async (req, res, next) => {
   try {
     const rescueCase = await RescueCase.findById(req.params.id)
@@ -280,6 +299,7 @@ router.put(
   }
 );
 
+// ─── PATCH /api/cases/:id/status ─────────────────── Update case status
 router.patch(
   "/:id/status",
   protect,
@@ -294,6 +314,7 @@ router.patch(
         return res.status(404).json({ success: false, message: "Case not found." });
       }
 
+      // Validate transition
       const allowed = STATUS_TRANSITIONS[rescueCase.status] || [];
       if (!allowed.includes(status)) {
         return res.status(400).json({
@@ -306,6 +327,7 @@ router.patch(
       rescueCase.status = status;
       rescueCase.statusLog.push({ status, changedBy: req.user._id, note });
 
+      // Auto-set timestamps and assign
       if (status === "accepted") {
         rescueCase.assignedTo = assignTo || req.user._id;
       }
@@ -329,6 +351,7 @@ router.patch(
   }
 );
 
+// ─── POST /api/cases/:id/media ───────────────────── Add media to existing case
 router.post(
   "/:id/media",
   protect,
@@ -340,6 +363,7 @@ router.post(
         return res.status(404).json({ success: false, message: "Case not found." });
       }
 
+      // Only reporter, assigned responder, or admin can add media
       const isOwner = rescueCase.reportedBy.toString() === req.user._id.toString();
       const isAssigned = rescueCase.assignedTo?.toString() === req.user._id.toString();
       if (!isOwner && !isAssigned && req.user.role !== "admin") {
@@ -362,6 +386,7 @@ router.post(
   }
 );
 
+// ─── POST /api/cases/:id/feedback ────────────────── Reporter feedback after rescue
 router.post("/:id/feedback", protect, async (req, res, next) => {
   try {
     const { rating, feedback } = req.body;
@@ -388,24 +413,38 @@ router.post("/:id/feedback", protect, async (req, res, next) => {
 router.delete("/:id", protect, async (req, res, next) => {
   try {
     const rescueCase = await RescueCase.findById(req.params.id);
-    if (!rescueCase) return res.status(404).json({ success: false, message: "Case not found." });
+
+    if (!rescueCase) {
+      return res.status(404).json({
+        success: false,
+        message: "Case not found."
+      });
+    }
 
     const isAdmin = req.user.role === "admin";
     const isOwner = rescueCase.reportedBy.toString() === req.user._id.toString();
 
     if (!isAdmin && !isOwner) {
-      return res.status(403).json({ success: false, message: "Not authorized to delete this case." });
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized to delete this case."
+      });
     }
 
     if (!isAdmin && rescueCase.status !== "reported") {
       return res.status(400).json({
         success: false,
-        message: "You can only delete your case while it is in 'reported' status.",
+        message: "You can only delete your case while it is in 'reported' status."
       });
     }
 
     await rescueCase.deleteOne();
-    res.json({ success: true, message: "Case deleted." });
+
+    res.json({
+      success: true,
+      message: "Case deleted successfully."
+    });
+
   } catch (err) {
     next(err);
   }
