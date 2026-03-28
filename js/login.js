@@ -1,90 +1,37 @@
-﻿const tabs = document.querySelectorAll(".role-tab");
-const loginForm = document.getElementById("loginForm");
-const emailInput = loginForm ? loginForm.querySelector('input[name="email"]') : null;
-const passwordInput = loginForm ? loginForm.querySelector('input[name="password"]') : null;
-const toast = document.getElementById("toast");
+﻿const form = document.querySelector("form");
 
-let selectedRole = "user";
-let toastTimer = null;
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-function showMessage(message) {
-  if (!toast) {
-    alert(message);
-    return;
-  }
-  toast.textContent = message;
-  toast.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.remove("show"), 1800);
-}
+  const email = document.querySelector("input[type='email']").value;
+  const password = document.querySelector("input[type='password']").value;
 
-function redirectByRole(role) {
-  if (role === "ngo") {
-    window.location.href = "ngo.html";
-    return;
-  }
-  if (role === "volunteer") {
-    window.location.href = "ngo.html";
-    return;
-  }
-  window.location.href = "user.html";
-}
-
-tabs.forEach((tab) => {
-  tab.addEventListener("click", () => {
-    selectedRole = tab.dataset.role;
-    tabs.forEach((item) => {
-      item.classList.remove("active");
-      item.setAttribute("aria-selected", "false");
+  try {
+    const res = await fetch("http://localhost:5000/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
     });
-    tab.classList.add("active");
-    tab.setAttribute("aria-selected", "true");
-  });
+
+    const data = await res.json();
+
+    console.log("Login response:", data);
+
+    if (res.ok && data.success) {
+      alert("Login successful 🚀");
+
+      // 🔐 store token (VERY IMPORTANT)
+      localStorage.setItem("token", data.token);
+
+      // optional redirect
+      window.location.href = "index.html";
+    } else {
+      alert(data.message || "Login failed");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Server error");
+  }
 });
-
-if (loginForm) {
-  loginForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    const email = emailInput ? emailInput.value.trim().toLowerCase() : "";
-    const password = passwordInput ? passwordInput.value : "";
-
-    if (!email || !password) {
-      showMessage("Enter email and password.");
-      return;
-    }
-
-    const users = window.ResQState ? ResQState.getUsers() : [];
-    const account = users.find((user) => user.email === email);
-
-    if (account) {
-      if (account.password !== password) {
-        showMessage("Incorrect password.");
-        return;
-      }
-
-      if (account.role !== selectedRole && !(account.role === "volunteer" && selectedRole === "ngo")) {
-        showMessage(`This account is registered as ${account.role}.`);
-        return;
-      }
-
-      if (window.ResQState) {
-        ResQState.setSession({ name: account.name, email: account.email, role: account.role });
-      }
-      showMessage("Login successful.");
-      setTimeout(() => redirectByRole(account.role), 500);
-      return;
-    }
-
-    if (selectedRole !== "user") {
-      showMessage("Authorized account required for this role.");
-      return;
-    }
-
-    if (window.ResQState) {
-      ResQState.setSession({ name: "Guest User", email, role: selectedRole });
-    }
-    showMessage("No account found. Continuing as guest user.");
-    setTimeout(() => redirectByRole(selectedRole), 600);
-  });
-}

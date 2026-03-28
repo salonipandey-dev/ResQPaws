@@ -17,11 +17,19 @@ connectDB();
 
 const app = express();
 
+// ── CORS FIX (IMPORTANT 🔥) ───────────────────────────────────
+app.use(cors({
+  origin: ["http://localhost:5174", "http://localhost:3000"],
+  credentials: true
+}));
+
 // ── Middleware ────────────────────────────────────────────────
-app.use(cors({ origin: process.env.CLIENT_URL || "*", credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
+
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 
 // ── Health Check ──────────────────────────────────────────────
 app.get("/api/health", (req, res) => {
@@ -41,7 +49,10 @@ app.use("/api/admin", adminRoutes);
 
 // ── 404 Handler ───────────────────────────────────────────────
 app.use((req, res) => {
-  res.status(404).json({ success: false, message: `Route not found: ${req.originalUrl}` });
+  res.status(404).json({
+    success: false,
+    message: `Route not found: ${req.originalUrl}`,
+  });
 });
 
 // ── Global Error Handler ──────────────────────────────────────
@@ -49,6 +60,7 @@ app.use(errorHandler);
 
 // ── Start Server ──────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, () => {
   console.log(`
 🐾 ================================
