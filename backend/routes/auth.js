@@ -7,7 +7,9 @@ const { protect } = require("../middleware/auth");
 const { awardPoints, awardBadge } = require("../utils/gamification");
 
 const signToken = (id) =>
-  jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN || "7d" });
+  jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN || process.env.JWT_EXPIRE || "7d",
+  });
 
 // ─── POST /api/auth/register ────────────────────────────────
 router.post(
