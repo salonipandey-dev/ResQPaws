@@ -1,25 +1,18 @@
-<<<<<<< ours
-﻿const form = document.querySelector("form");
-=======
 const tabs = document.querySelectorAll(".role-tab");
 const loginForm = document.getElementById("loginForm");
 const emailInput = loginForm ? loginForm.querySelector('input[name="email"]') : null;
 const passwordInput = loginForm ? loginForm.querySelector('input[name="password"]') : null;
 const toast = document.getElementById("toast");
->>>>>>> theirs
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
+let toastTimer = null;
+let selectedRole = "user";
 
-<<<<<<< ours
-  const email = document.querySelector("input[type='email']").value;
-  const password = document.querySelector("input[type='password']").value;
-=======
 function showMessage(message) {
   if (!toast) {
     alert(message);
     return;
   }
+
   toast.textContent = message;
   toast.classList.add("show");
   clearTimeout(toastTimer);
@@ -33,20 +26,16 @@ function redirectByRole(role) {
   }
   window.location.href = "user.html";
 }
->>>>>>> theirs
 
-  try {
-    const res = await fetch("http://localhost:5000/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
+tabs.forEach((tab) => {
+  tab.addEventListener("click", () => {
+    selectedRole = tab.dataset.role || "user";
+
+    tabs.forEach((btn) => {
+      btn.classList.remove("active");
+      btn.setAttribute("aria-selected", "false");
     });
-<<<<<<< ours
 
-    const data = await res.json();
-=======
     tab.classList.add("active");
     tab.setAttribute("aria-selected", "true");
   });
@@ -100,42 +89,31 @@ if (loginForm) {
     const users = window.ResQState ? ResQState.getUsers() : [];
     const account = users.find((user) => user.email === email);
 
-    if (account) {
-      if (account.password !== password) {
-        showMessage("Incorrect password.");
-        return;
-      }
->>>>>>> theirs
-
-    console.log("Login response:", data);
-
-<<<<<<< ours
-    if (res.ok && data.success) {
-      alert("Login successful 🚀");
-
-      // 🔐 store token (VERY IMPORTANT)
-      localStorage.setItem("token", data.token);
-
-      // optional redirect
-      window.location.href = "index.html";
-    } else {
-      alert(data.message || "Login failed");
-    }
-  } catch (err) {
-    console.error(err);
-    alert("Server error");
-  }
-});
-=======
-      if (window.ResQState) {
-        ResQState.setSession({ name: account.name, email: account.email, role: account.role });
-      }
-      showMessage("Login successful (offline mode).");
-      setTimeout(() => redirectByRole(account.role), 500);
+    if (!account) {
+      showMessage("No account found. Please create an account first.");
       return;
     }
 
-    showMessage("No account found. Please create an account first.");
+    if (account.password !== password) {
+      showMessage("Incorrect password.");
+      return;
+    }
+
+    const roleMatches = account.role === selectedRole || (account.role === "volunteer" && selectedRole === "ngo");
+    if (!roleMatches) {
+      showMessage(`This account is registered as ${account.role}.`);
+      return;
+    }
+
+    if (window.ResQState) {
+      ResQState.setSession({
+        name: account.name,
+        email: account.email,
+        role: account.role
+      });
+    }
+
+    showMessage("Login successful (offline mode).");
+    setTimeout(() => redirectByRole(account.role), 500);
   });
 }
->>>>>>> theirs

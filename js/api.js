@@ -21,7 +21,15 @@
       headers.set("Authorization", `Bearer ${token}`);
     }
 
-    const response = await fetch(`${API_BASE}${path}`, { ...options, headers });
+    let response;
+    try {
+      response = await fetch(`${API_BASE}${path}`, { ...options, headers });
+    } catch (fetchError) {
+      const error = new Error("Cannot reach backend API. Start backend server and check API base URL.");
+      error.status = 0;
+      error.payload = null;
+      throw error;
+    }
     let data = null;
 
     try {
@@ -31,7 +39,10 @@
     }
 
     if (!response.ok) {
-      const message = data && (data.message || data.error) ? data.message || data.error : `Request failed: ${response.status}`;
+      const firstValidationMessage = data && Array.isArray(data.errors) && data.errors[0] ? data.errors[0].msg : "";
+      const message = data && (data.message || data.error || firstValidationMessage)
+        ? data.message || data.error || firstValidationMessage
+        : `Request failed: ${response.status}`;
       const error = new Error(message);
       error.status = response.status;
       error.payload = data;

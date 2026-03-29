@@ -92,35 +92,11 @@ if (form) {
         setTimeout(() => goToRolePage(roleValue), 700);
         return;
       } catch (error) {
-        showToast(error.message || "Online signup failed. Using offline mode.");
+        showToast(error.message || "Online signup failed.");
+        return;
       }
     }
 
-    const users = window.ResQState ? ResQState.getUsers() : [];
-    const exists = users.some((user) => user.email === emailValue);
-    if (exists) {
-      showToast("An account with this email already exists.");
-      return;
-    }
-
-    users.push({
-      name: nameValue,
-      email: emailValue,
-      phone: phoneValue,
-      role: roleValue,
-      password: password.value,
-      createdAt: new Date().toISOString()
-    });
-
-    if (window.ResQState) {
-      ResQState.saveUsers(users);
-      ResQState.setSession({ name: nameValue, email: emailValue, role: roleValue });
-    }
-
-    showToast("Account created successfully (offline mode).");
-
-    setTimeout(() => {
-      goToRolePage(roleValue);
-    }, 700);
+    showToast("API client not loaded. Please refresh and try again.");
   });
 }
