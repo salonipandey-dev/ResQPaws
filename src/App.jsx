@@ -1,4 +1,4 @@
-﻿import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AppShell from "./components/AppShell";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
@@ -23,7 +23,7 @@ export default function App() {
           <Route
             path="/user"
             element={
-              <ProtectedRoute roles={["user"]}>
+              <ProtectedRoute roles={["citizen"]}>
                 <UserDashboardPage />
               </ProtectedRoute>
             }

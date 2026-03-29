@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
@@ -7,24 +7,28 @@ export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
     setError("");
     setSuccess("");
+    setSubmitting(true);
 
-    const result = login({ ...form, role });
+    const result = await login({ ...form, role });
+    setSubmitting(false);
+
     if (!result.ok) {
       setError(result.message);
       return;
     }
 
     setSuccess(result.message || "Login successful.");
-    const target = location.state?.from?.pathname || (role === "user" ? "/user" : "/ngo");
-    setTimeout(() => navigate(target), 500);
+    const target = location.state?.from?.pathname || (result.session.role === "citizen" ? "/user" : "/ngo");
+    setTimeout(() => navigate(target), 400);
   };
 
   return (
@@ -69,7 +73,13 @@ export default function LoginPage() {
         {error ? <p className="text-sm text-rose-600">{error}</p> : null}
         {success ? <p className="text-sm text-emerald-600">{success}</p> : null}
 
-        <button type="submit" className="w-full rounded-lg bg-brand-600 px-3 py-2 font-semibold text-white hover:bg-brand-700">Login</button>
+        <button
+          type="submit"
+          disabled={submitting}
+          className="w-full rounded-lg bg-brand-600 px-3 py-2 font-semibold text-white hover:bg-brand-700 disabled:cursor-not-allowed disabled:bg-slate-400"
+        >
+          {submitting ? "Logging in..." : "Login"}
+        </button>
       </form>
 
       <div className="mt-4 flex items-center justify-between text-sm">

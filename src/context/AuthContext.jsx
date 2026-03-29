@@ -1,88 +1,140 @@
-﻿import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import {
-  clearSession,
-  createUser,
-  findUserByEmail,
-  getSession,
-  setSession,
-  updateUserPassword
-} from "../services/storage";
+  clearStoredSession,
+  clearStoredToken,
+  fetchMeApi,
+  getStoredSession,
+  getStoredToken,
+  loginApi,
+  setStoredSession,
+  setStoredToken,
+  signupApi,
+} from "../services/api";
 
 const AuthContext = createContext(null);
 
+function normalizeRole(roleInput) {
+  return roleInput === "user" ? "citizen" : roleInput;
+}
+
+function canAccessRole(tabRole, userRole) {
+  if (tabRole === "user") return userRole === "citizen";
+  if (tabRole === "ngo") return ["ngo", "volunteer"].includes(userRole);
+  return true;
+}
+
+function buildSession(user, token) {
+  return {
+    userId: user._id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    rescuePoints: user.rescuePoints || 0,
+    badges: user.badges || [],
+    token,
+  };
+}
+
 export function AuthProvider({ children }) {
-  const [session, setSessionState] = useState(getSession());
+  const [session, setSession] = useState(getStoredSession());
+  const [token, setToken] = useState(getStoredToken());
+  const [authLoading, setAuthLoading] = useState(Boolean(getStoredToken()));
 
-  const login = ({ email, password, role }) => {
-    const normalizedEmail = email.trim().toLowerCase();
-    const user = findUserByEmail(normalizedEmail);
-
-    if (!user) {
-      if (role !== "user") {
-        return { ok: false, message: "Authorized account required for this role." };
+  useEffect(() => {
+    const hydrate = async () => {
+      const storedToken = getStoredToken();
+      if (!storedToken) {
+        setAuthLoading(false);
+        return;
       }
 
-      const guest = { name: "Guest User", email: normalizedEmail, role: "user" };
-      setSession(guest);
-      setSessionState(guest);
-      return { ok: true, session: guest, message: "Logged in as guest user." };
-    }
+      try {
+        const me = await fetchMeApi(storedToken);
+        const nextSession = buildSession(me.user, storedToken);
+        setSession(nextSession);
+        setToken(storedToken);
+        setStoredSession(nextSession);
+      } catch {
+        clearStoredSession();
+        clearStoredToken();
+        setSession(null);
+        setToken(null);
+      } finally {
+        setAuthLoading(false);
+      }
+    };
 
-    if (user.password !== password) {
-      return { ok: false, message: "Incorrect password." };
-    }
+    hydrate();
+  }, []);
 
-    if (user.role !== role && !(user.role === "volunteer" && role === "ngo")) {
-      return { ok: false, message: `This account is registered as ${user.role}.` };
-    }
+  const login = async ({ email, password, role }) => {
+    try {
+      const result = await loginApi({ email: email.trim().toLowerCase(), password });
+      const userRole = result.user?.role;
 
-    const nextSession = { name: user.name, email: user.email, role: user.role };
-    setSession(nextSession);
-    setSessionState(nextSession);
-    return { ok: true, session: nextSession };
+      if (!canAccessRole(role, userRole)) {
+        return { ok: false, message: `This account is registered as ${userRole}.` };
+      }
+
+      const nextSession = buildSession(result.user, result.token);
+      setSession(nextSession);
+      setToken(result.token);
+      setStoredToken(result.token);
+      setStoredSession(nextSession);
+      return { ok: true, session: nextSession, message: "Login successful." };
+    } catch (error) {
+      return { ok: false, message: error.message || "Unable to login." };
+    }
   };
 
-  const signup = (payload) => {
-    const normalized = {
-      ...payload,
-      email: payload.email.trim().toLowerCase()
-    };
+  const signup = async (payload) => {
+    try {
+      const result = await signupApi({
+        name: payload.name.trim(),
+        email: payload.email.trim().toLowerCase(),
+        phone: payload.phone?.trim(),
+        role: normalizeRole(payload.role),
+        password: payload.password,
+      });
 
-    const created = createUser(normalized);
-    if (!created.ok) {
-      return created;
+      const nextSession = buildSession(result.user, result.token);
+      setSession(nextSession);
+      setToken(result.token);
+      setStoredToken(result.token);
+      setStoredSession(nextSession);
+
+      return { ok: true, session: nextSession };
+    } catch (error) {
+      return { ok: false, message: error.message || "Unable to create account." };
     }
-
-    const nextSession = {
-      name: created.user.name,
-      email: created.user.email,
-      role: created.user.role
-    };
-    setSession(nextSession);
-    setSessionState(nextSession);
-
-    return { ok: true, session: nextSession };
   };
 
   const logout = () => {
-    clearSession();
-    setSessionState(null);
+    clearStoredSession();
+    clearStoredToken();
+    setSession(null);
+    setToken(null);
   };
 
-  const resetPassword = (email, nextPassword) => {
-    const normalizedEmail = email.trim().toLowerCase();
-    const user = findUserByEmail(normalizedEmail);
-    if (!user) {
-      return { ok: false, message: "No account found for this email." };
-    }
-
-    updateUserPassword(normalizedEmail, nextPassword);
-    return { ok: true };
+  const resetPassword = () => {
+    return {
+      ok: false,
+      message: "Password reset API is not connected yet. We can add backend endpoint in Step 5/7.",
+    };
   };
 
   const value = useMemo(
-    () => ({ session, isLoggedIn: Boolean(session), login, signup, logout, resetPassword }),
-    [session]
+    () => ({
+      session,
+      token,
+      authLoading,
+      isLoggedIn: Boolean(session && token),
+      login,
+      signup,
+      logout,
+      resetPassword,
+    }),
+    [session, token, authLoading]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
