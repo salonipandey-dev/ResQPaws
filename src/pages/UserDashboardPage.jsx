@@ -10,9 +10,14 @@ export default function UserDashboardPage() {
   const { reports, statusFlow, getReward, loadingReports, reportsError } = useData();
 
   const myReports = useMemo(() => {
-    if (!session?.email) return reports;
-    return reports.filter((report) => report.createdBy?.email === session.email);
-  }, [reports, session?.email]);
+    if (!session?.userId && !session?.email) return reports;
+    return reports.filter((report) => {
+      if (session?.userId && report.createdBy?.userId) {
+        return report.createdBy.userId === session.userId;
+      }
+      return report.createdBy?.email === session.email;
+    });
+  }, [reports, session?.userId, session?.email]);
 
   const reward = getReward();
   const rescued = myReports.filter((r) => r.status === "rescued" || r.status === "closed").length;

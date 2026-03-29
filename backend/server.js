@@ -15,6 +15,13 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const CLIENT_URLS = (
+  "http://localhost:5173,http://127.0.0.1:5173," + (process.env.CLIENT_URL || "")
+)
+  .split(",")
+  .map((url) => url.trim().replace(/\/$/, ""))
+  .filter(Boolean);
+const ALLOW_ALL_ORIGINS = CLIENT_URLS.includes("*");
 
 // Core middleware
 app.use(express.json());
@@ -22,7 +29,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "*",
+    origin(origin, callback) {
+      const normalizedOrigin = origin?.replace(/\/$/, "");
+      if (!origin || ALLOW_ALL_ORIGINS || CLIENT_URLS.includes(normalizedOrigin)) {
+        return callback(null, true);
+      }
+      return callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
     credentials: true,
   })
 );

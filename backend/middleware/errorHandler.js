@@ -29,6 +29,21 @@ const errorHandler = (err, req, res, next) => {
     message = "Invalid token.";
     statusCode = 401;
   }
+  if (err.name === "TokenExpiredError") {
+    message = "Token expired. Please log in again.";
+    statusCode = 401;
+  }
+
+  // Bad JSON payload
+  if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
+    message = "Invalid JSON payload.";
+    statusCode = 400;
+  }
+
+  // CORS
+  if (err.message?.startsWith("CORS blocked")) {
+    statusCode = 403;
+  }
 
   res.status(statusCode).json({
     success: false,

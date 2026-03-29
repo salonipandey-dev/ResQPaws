@@ -14,16 +14,24 @@ function safeParseJSON(text) {
 
 async function request(path, { method = "GET", body, token, headers = {} } = {}) {
   const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
+  let response;
 
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    method,
-    headers: {
-      ...(isFormData ? {} : { "Content-Type": "application/json" }),
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...headers,
-    },
-    body: body ? (isFormData ? body : JSON.stringify(body)) : undefined,
-  });
+  try {
+    response = await fetch(`${API_BASE_URL}${path}`, {
+      method,
+      headers: {
+        ...(isFormData ? {} : { "Content-Type": "application/json" }),
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...headers,
+      },
+      body: body ? (isFormData ? body : JSON.stringify(body)) : undefined,
+    });
+  } catch (error) {
+    const err = new Error("Network error. Check backend server, CORS, and VITE_API_BASE_URL.");
+    err.status = 0;
+    err.cause = error;
+    throw err;
+  }
 
   const text = await response.text();
   const data = safeParseJSON(text);
@@ -93,4 +101,12 @@ export function updateCaseStatusApi(token, caseId, payload) {
 
 export function fetchRewardsApi(token, userId) {
   return request(`/users/${userId}/rewards`, { token });
+}
+
+export function updateCaseApi(token, caseId, payload) {
+  return request(`/cases/${caseId}`, { method: "PUT", token, body: payload });
+}
+
+export function deleteCaseApi(token, caseId) {
+  return request(`/cases/${caseId}`, { method: "DELETE", token });
 }

@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { createCaseApi, fetchCasesApi, fetchRewardsApi, updateCaseStatusApi } from "../services/api";
+import { createCaseApi, deleteCaseApi, fetchCasesApi, fetchRewardsApi, updateCaseApi, updateCaseStatusApi } from "../services/api";
 import { useAuth } from "./AuthContext";
 
 const DataContext = createContext(null);
@@ -22,6 +22,8 @@ function normalizeCase(item) {
   const coordinates = item?.location?.coordinates || [];
   const lat = coordinates[1];
   const lng = coordinates[0];
+  const reporterId =
+    typeof item?.reportedBy === "string" ? item.reportedBy : item?.reportedBy?._id;
 
   return {
     id: item._id,
@@ -33,6 +35,7 @@ function normalizeCase(item) {
     location: item.address || (lat && lng ? `${lat}, ${lng}` : item.city || "Unknown"),
     media: item.media || [],
     createdBy: {
+      userId: reporterId || "",
       name: item.reportedBy?.name || "Reporter",
       email: item.reportedBy?.email || "",
       phone: item.contactPhone || "",
@@ -129,6 +132,34 @@ export function DataProvider({ children }) {
     }
   };
 
+  const updateReport = async (reportId, payload) => {
+    if (!token) {
+      return { ok: false, message: "Please log in first." };
+    }
+
+    try {
+      const result = await updateCaseApi(token, reportId, payload);
+      await refreshReports();
+      return { ok: true, report: normalizeCase(result.data) };
+    } catch (error) {
+      return { ok: false, message: error.message || "Unable to update case details." };
+    }
+  };
+
+  const deleteReport = async (reportId) => {
+    if (!token) {
+      return { ok: false, message: "Please log in first." };
+    }
+
+    try {
+      await deleteCaseApi(token, reportId);
+      await refreshReports();
+      return { ok: true };
+    } catch (error) {
+      return { ok: false, message: error.message || "Unable to delete case." };
+    }
+  };
+
   const progressReport = async (reportId) => {
     if (!token) {
       return { ok: false, message: "Please log in first." };
@@ -166,6 +197,8 @@ export function DataProvider({ children }) {
       loadingReports,
       reportsError,
       submitReport,
+      updateReport,
+      deleteReport,
       progressReport,
       refreshReports,
       getReward,
