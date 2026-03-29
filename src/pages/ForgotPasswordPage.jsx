@@ -1,6 +1,5 @@
-﻿import { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { findUserByEmail } from "../services/storage";
 import { useAuth } from "../context/AuthContext";
 
 export default function ForgotPasswordPage() {
@@ -20,18 +19,11 @@ export default function ForgotPasswordPage() {
   const requestOtp = (event) => {
     event.preventDefault();
     setError("");
-    const normalized = email.trim().toLowerCase();
-    const user = findUserByEmail(normalized);
-
-    if (!user) {
-      setError("No authorized account found with this email.");
-      return;
-    }
 
     const code = String(Math.floor(100000 + Math.random() * 900000));
     setOtp(code);
     setStep(2);
-    setSuccess(`Reset code generated for ${maskedEmail || normalized}. Demo OTP: ${code}`);
+    setSuccess(`Demo reset code generated for ${maskedEmail || email.trim().toLowerCase()}: ${code}`);
   };
 
   const reset = (event) => {

@@ -1,4 +1,4 @@
-﻿import { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import StatusTimeline from "../components/StatusTimeline";
 import UrgencyPill from "../components/UrgencyPill";
 import { useData } from "../context/DataContext";
@@ -7,15 +7,28 @@ function matchFilter(report, filter) {
   if (filter === "all") return true;
   if (filter === "urgent") return ["urgent", "critical"].includes(report.urgency);
   if (filter === "completed") return ["rescued", "closed"].includes(report.status);
-  if (filter === "nearby") return (report.location || "").toLowerCase().includes("mumbai");
+  if (filter === "nearby") return Boolean(report.location);
   return true;
 }
 
 export default function NgoDashboardPage() {
-  const { reports, progressReport, statusFlow } = useData();
+  const { reports, progressReport, statusFlow, loadingReports, reportsError } = useData();
   const [filter, setFilter] = useState("all");
+  const [actionError, setActionError] = useState("");
+  const [busyId, setBusyId] = useState("");
 
   const visible = useMemo(() => reports.filter((report) => matchFilter(report, filter)), [reports, filter]);
+
+  const handleProgress = async (report) => {
+    setActionError("");
+    setBusyId(report.id);
+    const result = await progressReport(report.id);
+    setBusyId("");
+
+    if (!result.ok) {
+      setActionError(result.message);
+    }
+  };
 
   return (
     <section className="space-y-4">
@@ -27,7 +40,7 @@ export default function NgoDashboardPage() {
           {[
             ["all", "All Cases"],
             ["urgent", "Urgent"],
-            ["nearby", "Nearby (Mumbai)"],
+            ["nearby", "Nearby"],
             ["completed", "Completed"]
           ].map(([key, label]) => (
             <button
@@ -41,6 +54,10 @@ export default function NgoDashboardPage() {
           ))}
         </div>
       </div>
+
+      {loadingReports ? <div className="rounded-2xl bg-white p-5 text-sm text-slate-500 shadow-sm">Loading cases...</div> : null}
+      {reportsError ? <div className="rounded-2xl bg-rose-50 p-5 text-sm text-rose-700 shadow-sm">{reportsError}</div> : null}
+      {actionError ? <div className="rounded-2xl bg-rose-50 p-5 text-sm text-rose-700 shadow-sm">{actionError}</div> : null}
 
       <div className="grid gap-4 lg:grid-cols-2">
         {visible.map((report) => (
@@ -59,17 +76,17 @@ export default function NgoDashboardPage() {
 
             <button
               type="button"
-              onClick={() => progressReport(report.id)}
-              disabled={report.status === "closed"}
+              onClick={() => handleProgress(report)}
+              disabled={report.status === "closed" || busyId === report.id}
               className="mt-4 rounded-lg bg-brand-600 px-3 py-2 text-sm font-semibold text-white hover:bg-brand-700 disabled:cursor-not-allowed disabled:bg-slate-300"
             >
-              {report.status === "closed" ? "Case Closed" : "Move To Next Stage"}
+              {busyId === report.id ? "Updating..." : report.status === "closed" ? "Case Closed" : "Move To Next Stage"}
             </button>
           </article>
         ))}
       </div>
 
-      {visible.length === 0 ? (
+      {!loadingReports && visible.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-5 text-sm text-slate-500">No cases match this filter.</div>
       ) : null}
     </section>

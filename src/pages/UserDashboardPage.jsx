@@ -1,4 +1,4 @@
-﻿import { useMemo } from "react";
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import StatusTimeline from "../components/StatusTimeline";
 import UrgencyPill from "../components/UrgencyPill";
@@ -7,15 +7,14 @@ import { useData } from "../context/DataContext";
 
 export default function UserDashboardPage() {
   const { session } = useAuth();
-  const { reports, statusFlow, getReward } = useData();
+  const { reports, statusFlow, getReward, loadingReports, reportsError } = useData();
 
   const myReports = useMemo(() => {
     if (!session?.email) return reports;
-    const own = reports.filter((report) => report.createdBy?.email === session.email);
-    return own.length ? own : reports;
+    return reports.filter((report) => report.createdBy?.email === session.email);
   }, [reports, session?.email]);
 
-  const reward = getReward(session?.email || "");
+  const reward = getReward();
   const rescued = myReports.filter((r) => r.status === "rescued" || r.status === "closed").length;
 
   const shareText = encodeURIComponent(
@@ -29,6 +28,13 @@ export default function UserDashboardPage() {
           <h1 className="text-2xl font-bold">My Rescue Reports</h1>
           <p className="mt-1 text-sm text-slate-600">Track progress across all stages from reported to closed.</p>
         </div>
+
+        {loadingReports ? <div className="rounded-2xl bg-white p-5 text-sm text-slate-500 shadow-sm">Loading reports...</div> : null}
+        {reportsError ? <div className="rounded-2xl bg-rose-50 p-5 text-sm text-rose-700 shadow-sm">{reportsError}</div> : null}
+
+        {!loadingReports && myReports.length === 0 ? (
+          <div className="rounded-2xl bg-white p-5 text-sm text-slate-500 shadow-sm">No reports found yet.</div>
+        ) : null}
 
         {myReports.map((report) => (
           <article key={report.id} className="rounded-2xl bg-white p-5 shadow-sm">

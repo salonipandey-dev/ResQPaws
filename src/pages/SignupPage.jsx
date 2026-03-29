@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
@@ -15,10 +15,11 @@ export default function SignupPage() {
   const [form, setForm] = useState(initial);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const { signup } = useAuth();
   const navigate = useNavigate();
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
     setError("");
     setSuccess("");
@@ -33,13 +34,15 @@ export default function SignupPage() {
       return;
     }
 
-    const result = signup({
-      name: form.name.trim(),
-      email: form.email.trim().toLowerCase(),
-      phone: form.phone.trim(),
+    setSubmitting(true);
+    const result = await signup({
+      name: form.name,
+      email: form.email,
+      phone: form.phone,
       role: form.role,
-      password: form.password
+      password: form.password,
     });
+    setSubmitting(false);
 
     if (!result.ok) {
       setError(result.message);
@@ -47,7 +50,8 @@ export default function SignupPage() {
     }
 
     setSuccess("Account created successfully.");
-    setTimeout(() => navigate(form.role === "user" ? "/user" : "/ngo"), 600);
+    const role = result.session?.role;
+    setTimeout(() => navigate(role === "citizen" ? "/user" : "/ngo"), 500);
   };
 
   return (
@@ -72,8 +76,12 @@ export default function SignupPage() {
           {success ? <p className="text-sm text-emerald-600">{success}</p> : null}
         </div>
 
-        <button className="md:col-span-2 rounded-lg bg-brand-600 px-3 py-2 font-semibold text-white hover:bg-brand-700" type="submit">
-          Create Account
+        <button
+          className="md:col-span-2 rounded-lg bg-brand-600 px-3 py-2 font-semibold text-white hover:bg-brand-700 disabled:cursor-not-allowed disabled:bg-slate-400"
+          type="submit"
+          disabled={submitting}
+        >
+          {submitting ? "Creating account..." : "Create Account"}
         </button>
       </form>
     </section>
