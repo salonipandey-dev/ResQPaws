@@ -1,4 +1,4 @@
-﻿const loginBtn = document.getElementById("loginBtn");
+const loginBtn = document.getElementById("loginBtn");
 const emergencyBtn = document.getElementById("emergencyBtn");
 const menuBtn = document.getElementById("menuBtn");
 const quickMenu = document.getElementById("quickMenu");
@@ -12,7 +12,7 @@ const stepsSection = document.querySelector(".steps");
 
 const state = {
   selectedUrgency: "medium",
-  session: window.ResQState ? ResQState.getSession() : null,
+  session: window.ResQState ? window.ResQState.getSession() : null,
   currentLocation: null
 };
 
@@ -121,7 +121,7 @@ if (reportBtn) {
       return;
     }
 
-    const report = ResQState.createReport({
+    const report = window.ResQState.createReport({
       urgency: state.selectedUrgency,
       location: state.currentLocation || "Location not shared",
       details: "Quick report submitted from home page.",
@@ -145,7 +145,7 @@ if (trackReportLink) {
     const reportId = prompt("Enter your Report ID (example: RP-12345678):");
     if (!reportId || !window.ResQState) return;
 
-    const reports = ResQState.getReports();
+    const reports = window.ResQState.getReports();
     const record = reports.find((report) => report.id === reportId.trim());
 
     if (!record) {
@@ -156,3 +156,4 @@ if (trackReportLink) {
     showToast(`${record.id}: ${record.status} (${formatUrgency(record.urgency)}).`);
   });
 }
+

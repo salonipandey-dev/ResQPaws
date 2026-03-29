@@ -1,4 +1,4 @@
-﻿const form = document.getElementById("emergencyForm");
+const form = document.getElementById("emergencyForm");
 const uploadPhotoBtn = document.getElementById("uploadPhotoBtn");
 const photoInput = document.getElementById("photoInput");
 const photoText = document.getElementById("photoText");
@@ -14,7 +14,7 @@ const toast = document.getElementById("toast");
 const draftKey = "resq_report_draft";
 const rewardKey = "resq_rewards";
 const draft = JSON.parse(localStorage.getItem(draftKey) || "{}");
-const session = window.ResQState ? ResQState.getSession() : null;
+const session = window.ResQState ? window.ResQState.getSession() : null;
 
 let selectedUrgency = draft.urgency || "urgent";
 let photoAdded = Boolean(draft.imageName);
@@ -239,7 +239,7 @@ if (form) {
       return;
     }
 
-    const allReports = ResQState.getReports();
+    const allReports = window.ResQState.getReports();
     const duplicate = isLikelyDuplicate(allReports, draft.location || "", details.value.trim());
     if (duplicate) {
       const proceed = confirm("A similar report was recently filed at this location. Submit anyway?");
@@ -286,13 +286,13 @@ if (form) {
           formData.append("media", photoInput.files[0]);
         }
 
-        const response = await ResQApi.request("/cases", { method: "POST", body: formData });
+        const response = await window.ResQApi.request("/cases", { method: "POST", body: formData });
         const apiCase = response && response.data ? response.data : null;
 
         localReportPayload.id = apiCase && apiCase.caseId ? apiCase.caseId : undefined;
         localReportPayload.backendId = apiCase && apiCase._id ? apiCase._id : undefined;
 
-        const report = ResQState.createReport(localReportPayload);
+        const report = window.ResQState.createReport(localReportPayload);
         addRewards();
         localStorage.removeItem(draftKey);
         showToast(`Report submitted: ${report.id}`);
@@ -306,7 +306,7 @@ if (form) {
       }
     }
 
-    const report = ResQState.createReport(localReportPayload);
+    const report = window.ResQState.createReport(localReportPayload);
     addRewards();
     localStorage.removeItem(draftKey);
     showToast(`Report submitted: ${report.id}`);
@@ -316,3 +316,4 @@ if (form) {
     }, 900);
   });
 }
+

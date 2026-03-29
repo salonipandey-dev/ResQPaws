@@ -5,7 +5,7 @@
 
   function getToken() {
     if (!window.ResQState) return "";
-    const session = ResQState.getSession();
+    const session = window.ResQState.getSession();
     return session && session.token ? session.token : "";
   }
 
@@ -89,3 +89,4 @@
     baseUrl: API_BASE
   };
 })();
+

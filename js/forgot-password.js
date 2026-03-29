@@ -31,7 +31,7 @@ if (requestForm) {
     event.preventDefault();
 
     const email = normalizeEmail(resetEmail.value);
-    const users = window.ResQState ? ResQState.getUsers() : [];
+    const users = window.ResQState ? window.ResQState.getUsers() : [];
     const exists = users.some((user) => user.email === email);
 
     if (!email) {
@@ -92,13 +92,13 @@ if (resetForm) {
       return;
     }
 
-    const users = window.ResQState ? ResQState.getUsers() : [];
+    const users = window.ResQState ? window.ResQState.getUsers() : [];
     const nextUsers = users.map((user) =>
       user.email === payload.email ? { ...user, password: newPassword.value } : user
     );
 
     if (window.ResQState) {
-      ResQState.saveUsers(nextUsers);
+      window.ResQState.saveUsers(nextUsers);
     }
     localStorage.removeItem(resetKey);
     showToast("Password reset successful. Redirecting to login.");
@@ -108,3 +108,4 @@ if (resetForm) {
     }, 900);
   });
 }
+
