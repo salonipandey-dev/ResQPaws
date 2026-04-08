@@ -299,3 +299,24 @@ body {
     padding: 14px;
   }
 }
+
+.back-btn {
+  position: fixed;
+  top: 100px;
+  left: 20px;
+  background: var(--orange);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: 0.3s;
+  z-index: 1000;
+}
+
+.back-btn:hover {
+  background: var(--orange-deep);
+  transform: translateY(-2px);
+}

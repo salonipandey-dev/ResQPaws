@@ -156,3 +156,7 @@ if (trackReportLink) {
     showToast(`${record.id}: ${record.status} (${formatUrgency(record.urgency)}).`);
   });
 }
+
+document.getElementById("reportBtn").addEventListener("click", () => {
+  window.location.href = "login.html";
+});
