@@ -157,3 +157,7 @@ if (trackReportLink) {
   });
 }
 
+
+document.getElementById("reportBtn").addEventListener("click", () => {
+  window.location.href = "login.html";
+});
