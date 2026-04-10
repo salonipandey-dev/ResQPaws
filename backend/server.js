@@ -23,6 +23,7 @@ const CLIENT_URLS = (
   .map((url) => url.trim().replace(/\/$/, ""))
   .filter(Boolean);
 const ALLOW_ALL_ORIGINS = CLIENT_URLS.includes("*");
+const LOCAL_DEV_ORIGIN = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;
 
 function validateEnv() {
   const required = ["MONGO_URI", "JWT_SECRET"];
@@ -46,7 +47,15 @@ app.use(
   cors({
     origin(origin, callback) {
       const normalizedOrigin = origin?.replace(/\/$/, "");
-      if (!origin || ALLOW_ALL_ORIGINS || CLIENT_URLS.includes(normalizedOrigin)) {
+      const isNullOrigin = origin === "null";
+      const isLocalDevOrigin = normalizedOrigin ? LOCAL_DEV_ORIGIN.test(normalizedOrigin) : false;
+      if (
+        !origin ||
+        isNullOrigin ||
+        ALLOW_ALL_ORIGINS ||
+        CLIENT_URLS.includes(normalizedOrigin) ||
+        (NODE_ENV !== "production" && isLocalDevOrigin)
+      ) {
         return callback(null, true);
       }
       return callback(new Error(`CORS blocked for origin: ${origin}`));

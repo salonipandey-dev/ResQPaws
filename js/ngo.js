@@ -127,12 +127,12 @@ function renderCases() {
 async function updateStatus(report, status) {
   if (window.ResQApi && report.backendId) {
     try {
-      await ResQApi.request(`/cases/${report.backendId}/status`, {
+      await window.ResQApi.request(`/cases/${report.backendId}/status`, {
         method: "PATCH",
         body: JSON.stringify({ status })
       });
       if (window.ResQState) {
-        ResQState.updateReport(report.id, { status });
+        window.ResQState.updateReport(report.id, { status });
       }
       return true;
     } catch (error) {
@@ -141,7 +141,7 @@ async function updateStatus(report, status) {
   }
 
   if (window.ResQState) {
-    ResQState.updateReport(report.id, { status });
+    window.ResQState.updateReport(report.id, { status });
   }
   return true;
 }
@@ -169,12 +169,12 @@ function bindCaseActions() {
 
 async function loadCases() {
   if (window.ResQApi && window.ResQState) {
-    const session = ResQState.getSession();
+    const session = window.ResQState.getSession();
     if (session && session.token) {
       try {
-        const response = await ResQApi.request("/cases");
-        const remote = (response.data || []).map(ResQApi.mapCase);
-        const local = ResQState.getReports();
+        const response = await window.ResQApi.request("/cases");
+        const remote = (response.data || []).map(window.ResQApi.mapCase);
+        const local = window.ResQState.getReports();
         const seen = new Set(remote.map((item) => item.id));
         caseCache = [...remote, ...local.filter((item) => !seen.has(item.id))]
           .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -186,7 +186,7 @@ async function loadCases() {
     }
   }
 
-  caseCache = window.ResQState ? ResQState.getReports() : [];
+  caseCache = window.ResQState ? window.ResQState.getReports() : [];
   renderCases();
 }
 
@@ -211,9 +211,10 @@ filterTabs.forEach((tab) => {
 if (ngoLogout) {
   ngoLogout.addEventListener("click", () => {
     if (window.ResQState) {
-      ResQState.clearSession();
+      window.ResQState.clearSession();
     }
   });
 }
 
 loadCases();
+

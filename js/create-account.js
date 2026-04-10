@@ -66,23 +66,23 @@ if (form) {
 
     if (window.ResQApi) {
       try {
-        const payload = await ResQApi.request("/auth/register", {
+        const payload = await window.ResQApi.request("/auth/register", {
           method: "POST",
           body: JSON.stringify({
             name: nameValue,
             email: emailValue,
             phone: phoneValue,
             password: password.value,
-            role: ResQApi.frontendRoleToApi(roleValue)
+            role: window.ResQApi.frontendRoleToApi(roleValue)
           })
         });
 
         if (window.ResQState) {
           const user = payload.user || {};
-          ResQState.setSession({
+          window.ResQState.setSession({
             name: user.name || nameValue,
             email: user.email || emailValue,
-            role: ResQApi.apiRoleToFrontend(user.role || ResQApi.frontendRoleToApi(roleValue)),
+            role: window.ResQApi.apiRoleToFrontend(user.role || window.ResQApi.frontendRoleToApi(roleValue)),
             token: payload.token,
             userId: user._id || user.id || ""
           });
@@ -100,3 +100,4 @@ if (form) {
     showToast("API client not loaded. Please refresh and try again.");
   });
 }
+

@@ -119,14 +119,14 @@ function updateStats(reports) {
 
 async function getUserReports() {
   if (!window.ResQState) return [];
-  const session = ResQState.getSession();
+  const session = window.ResQState.getSession();
 
-  const allReports = ResQState.getReports();
+  const allReports = window.ResQState.getReports();
 
   if (window.ResQApi && session && session.token) {
     try {
-      const response = await ResQApi.request("/cases");
-      const remoteReports = (response.data || []).map(ResQApi.mapCase);
+      const response = await window.ResQApi.request("/cases");
+      const remoteReports = (response.data || []).map(window.ResQApi.mapCase);
       const seen = new Set(remoteReports.map((report) => report.id));
       const localOnly = allReports.filter((report) => !seen.has(report.id));
       return [...remoteReports, ...localOnly].sort(
@@ -155,7 +155,7 @@ async function renderDashboard() {
 
 function renderRewards() {
   if (!rewardPoints || !rewardBadge || !window.ResQState) return;
-  const session = ResQState.getSession();
+  const session = window.ResQState.getSession();
   const rewards = JSON.parse(localStorage.getItem("resq_rewards") || "{}");
   const current = session && session.email ? rewards[session.email] : null;
 
@@ -197,7 +197,7 @@ if (reportNewBtn) {
 if (logoutLink) {
   logoutLink.addEventListener("click", () => {
     if (window.ResQState) {
-      ResQState.clearSession();
+      window.ResQState.clearSession();
     }
   });
 }
@@ -210,3 +210,4 @@ const params = new URLSearchParams(window.location.search);
 if (params.get("new") === "1") {
   showToast("New report added to your feed.");
 }
+

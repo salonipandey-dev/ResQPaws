@@ -55,13 +55,13 @@ if (loginForm) {
 
     if (window.ResQApi) {
       try {
-        const payload = await ResQApi.request("/auth/login", {
+        const payload = await window.ResQApi.request("/auth/login", {
           method: "POST",
           body: JSON.stringify({ email, password })
         });
 
         const user = payload.user || {};
-        const appRole = ResQApi.apiRoleToFrontend(user.role);
+        const appRole = window.ResQApi.apiRoleToFrontend(user.role);
         const roleMatches = appRole === selectedRole || (appRole === "volunteer" && selectedRole === "ngo");
         if (!roleMatches) {
           showMessage(`This account is registered as ${appRole}.`);
@@ -69,7 +69,7 @@ if (loginForm) {
         }
 
         if (window.ResQState) {
-          ResQState.setSession({
+          window.ResQState.setSession({
             name: user.name,
             email: user.email,
             role: appRole,
@@ -86,7 +86,7 @@ if (loginForm) {
       }
     }
 
-    const users = window.ResQState ? ResQState.getUsers() : [];
+    const users = window.ResQState ? window.ResQState.getUsers() : [];
     const account = users.find((user) => user.email === email);
 
     if (!account) {
@@ -106,7 +106,7 @@ if (loginForm) {
     }
 
     if (window.ResQState) {
-      ResQState.setSession({
+      window.ResQState.setSession({
         name: account.name,
         email: account.email,
         role: account.role
@@ -117,3 +117,4 @@ if (loginForm) {
     setTimeout(() => redirectByRole(account.role), 500);
   });
 }
+
