@@ -107,3 +107,16 @@ if (reportBtn) {
     window.location.href = "emergency-form.html";
   });
 }
+
+function goBack() {
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    window.location.href = "index.html"; // fallback page
+  }
+}
+
+function goBack() {
+  alert("clicked");
+  window.history.back();
+}
