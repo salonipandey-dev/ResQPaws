@@ -157,7 +157,6 @@ if (trackReportLink) {
   });
 }
 
-feature/contact-form-integration
 
 document.getElementById("reportBtn").addEventListener("click", () => {
   window.location.href = "login.html";
