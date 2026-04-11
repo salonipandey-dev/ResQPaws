@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { body, validationResult } = require("express-validator");
+const { body } = require("express-validator");
 const RescueCase = require("../models/RescueCase");
 const { protect, authorize, requireVerified } = require("../middleware/auth");
 const { uploadCaseMedia } = require("../config/cloudinary");
 const { handleCaseReported, handleCaseRescued, penalizeFakeReport } = require("../utils/gamification");
+const { sendValidationErrors, parsePositiveInt, parseJsonArray } = require("../utils/request");
 
 const STATUS_TRANSITIONS = {
   reported: ["verified", "rejected"],
@@ -29,10 +30,7 @@ router.post(
   ],
   async (req, res, next) => {
     try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ success: false, errors: errors.array() });
-      }
+      if (sendValidationErrors(req, res)) return;
 
       const {
         animalType,
@@ -63,7 +61,7 @@ router.post(
         animalCount: animalCount || 1,
         description,
         urgencyLevel: urgencyLevel || "medium",
-        conditionTags: conditionTags ? JSON.parse(conditionTags) : [],
+        conditionTags: parseJsonArray(conditionTags, "conditionTags"),
         location: {
           type: "Point",
           coordinates: [parseFloat(longitude), parseFloat(latitude)],
@@ -106,6 +104,8 @@ router.get("/", protect, async (req, res, next) => {
       sort = "-createdAt",
     } = req.query;
 
+    const currentPage = parsePositiveInt(page, 1, { min: 1, max: 100000 });
+    const pageLimit = parsePositiveInt(limit, 10, { min: 1, max: 100 });
     const filter = {};
 
     if (req.user.role === "citizen") {
@@ -129,22 +129,22 @@ router.get("/", protect, async (req, res, next) => {
       };
     }
 
-    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const skip = (currentPage - 1) * pageLimit;
     const [cases, total] = await Promise.all([
       RescueCase.find(filter)
         .populate("reportedBy", "name email avatar role trustScore")
         .populate("assignedTo", "name avatar role organizationName")
         .sort(sort)
         .skip(skip)
-        .limit(parseInt(limit)),
+        .limit(pageLimit),
       RescueCase.countDocuments(filter),
     ]);
 
     res.json({
       success: true,
       total,
-      page: parseInt(page),
-      pages: Math.ceil(total / limit),
+      page: currentPage,
+      pages: Math.ceil(total / pageLimit),
       data: cases,
     });
   } catch (err) {
@@ -207,10 +207,7 @@ router.put(
   ],
   async (req, res, next) => {
     try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ success: false, errors: errors.array() });
-      }
+      if (sendValidationErrors(req, res)) return;
 
       const rescueCase = await RescueCase.findById(req.params.id);
       if (!rescueCase) {
@@ -261,9 +258,7 @@ router.put(
       }
 
       if (req.body.conditionTags !== undefined) {
-        rescueCase.conditionTags = Array.isArray(req.body.conditionTags)
-          ? req.body.conditionTags
-          : JSON.parse(req.body.conditionTags);
+        rescueCase.conditionTags = parseJsonArray(req.body.conditionTags, "conditionTags");
       }
 
       rescueCase.statusLog.push({

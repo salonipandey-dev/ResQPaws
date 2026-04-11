@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require("../models/User");
 const RescueCase = require("../models/RescueCase");
 const { protect, authorize } = require("../middleware/auth");
+const { parsePositiveInt } = require("../utils/request");
 
 // All admin routes require auth + admin role
 router.use(protect, authorize("admin"));
@@ -100,6 +101,8 @@ router.get("/dashboard", async (req, res, next) => {
 router.get("/users", async (req, res, next) => {
   try {
     const { role, isVerified, page = 1, limit = 20, search } = req.query;
+    const currentPage = parsePositiveInt(page, 1, { min: 1, max: 100000 });
+    const pageLimit = parsePositiveInt(limit, 20, { min: 1, max: 200 });
     const filter = {};
     if (role) filter.role = role;
     if (isVerified !== undefined) filter.isVerified = isVerified === "true";
@@ -112,8 +115,8 @@ router.get("/users", async (req, res, next) => {
     const [users, total] = await Promise.all([
       User.find(filter)
         .sort("-createdAt")
-        .skip((parseInt(page) - 1) * parseInt(limit))
-        .limit(parseInt(limit))
+        .skip((currentPage - 1) * pageLimit)
+        .limit(pageLimit)
         .select("-password"),
       User.countDocuments(filter),
     ]);

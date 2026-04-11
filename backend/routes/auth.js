@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const { body, validationResult } = require("express-validator");
+const { body } = require("express-validator");
 const User = require("../models/User");
 const { protect } = require("../middleware/auth");
 const { awardPoints, awardBadge } = require("../utils/gamification");
+const { sendValidationErrors } = require("../utils/request");
 
 const signToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -25,10 +26,7 @@ router.post(
   ],
   async (req, res, next) => {
     try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ success: false, errors: errors.array() });
-      }
+      if (sendValidationErrors(req, res)) return;
 
       const { name, email, password, role, phone, organizationName, registrationNumber, city, state } = req.body;
 
@@ -77,10 +75,7 @@ router.post(
   ],
   async (req, res, next) => {
     try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ success: false, errors: errors.array() });
-      }
+      if (sendValidationErrors(req, res)) return;
 
       const { email, password } = req.body;
 
@@ -125,10 +120,7 @@ router.put(
   ],
   async (req, res, next) => {
     try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ success: false, errors: errors.array() });
-      }
+      if (sendValidationErrors(req, res)) return;
 
       const user = await User.findById(req.user._id).select("+password");
       if (!(await user.matchPassword(req.body.currentPassword))) {

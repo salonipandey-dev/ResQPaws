@@ -5,18 +5,20 @@ const Reward = require("../models/Reward");
 const RescueCase = require("../models/RescueCase");
 const { protect, authorize } = require("../middleware/auth");
 const { uploadAvatar } = require("../config/cloudinary");
+const { parsePositiveInt } = require("../utils/request");
 
 // ─── GET /api/users/leaderboard ─────────────────────────────
 router.get("/leaderboard", protect, async (req, res, next) => {
   try {
     const { city, state, limit = 10 } = req.query;
+    const topN = parsePositiveInt(limit, 10, { min: 1, max: 100 });
     const filter = { isActive: true, role: { $ne: "admin" } };
     if (city) filter.city = new RegExp(city, "i");
     if (state) filter.state = new RegExp(state, "i");
 
     const leaders = await User.find(filter)
       .sort({ rescuePoints: -1 })
-      .limit(parseInt(limit))
+      .limit(topN)
       .select("name avatar role rescuePoints trustScore totalReports totalRescues badges city state organizationName");
 
     res.json({ success: true, data: leaders });

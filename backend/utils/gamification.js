@@ -46,6 +46,7 @@ const awardBadge = async (userId, badgeKey) => {
   if (!badge) return;
 
   const user = await User.findById(userId);
+  if (!user) return;
   const alreadyHas = user.badges.some((b) => b.name === badge.name);
   if (alreadyHas) return;
 
@@ -66,6 +67,7 @@ const handleCaseReported = async (userId, caseId) => {
   await awardPoints(userId, "case_reported", caseId);
 
   const user = await User.findById(userId);
+  if (!user) return;
 
   if (user.totalReports === 1) {
     await awardBadge(userId, "first_rescue");

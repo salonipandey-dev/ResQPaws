@@ -118,8 +118,25 @@ rescueCaseSchema.index({ assignedTo: 1 });
 rescueCaseSchema.pre("save", async function (next) {
   if (!this.caseId) {
     const year = new Date().getFullYear();
-    const count = await mongoose.model("RescueCase").countDocuments();
-    this.caseId = `RQ-${year}-${String(count + 1).padStart(5, "0")}`;
+    const RescueCase = mongoose.model("RescueCase");
+    const maxAttempts = 5;
+
+    for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+      const count = await RescueCase.countDocuments();
+      const randomSuffix = Math.floor(Math.random() * 90 + 10);
+      const serial = String(count + 1 + attempt).padStart(5, "0");
+      const candidate = `RQ-${year}-${serial}-${randomSuffix}`;
+      const exists = await RescueCase.exists({ caseId: candidate });
+
+      if (!exists) {
+        this.caseId = candidate;
+        break;
+      }
+    }
+
+    if (!this.caseId) {
+      return next(new Error("Unable to generate a unique case ID. Please retry."));
+    }
   }
   next();
 });
