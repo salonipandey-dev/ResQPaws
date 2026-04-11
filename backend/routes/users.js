@@ -3,9 +3,12 @@ const router = express.Router();
 const User = require("../models/User");
 const Reward = require("../models/Reward");
 const RescueCase = require("../models/RescueCase");
-const { protect, authorize } = require("../middleware/auth");
+const { protect } = require("../middleware/auth");
 const { uploadAvatar } = require("../config/cloudinary");
 const { parsePositiveInt } = require("../utils/request");
+
+const respondNotFound = (res, resource = "User") =>
+  res.status(404).json({ success: false, message: `${resource} not found.` });
 
 // ─── GET /api/users/leaderboard ─────────────────────────────
 router.get("/leaderboard", protect, async (req, res, next) => {
@@ -33,7 +36,7 @@ router.get("/:id", protect, async (req, res, next) => {
     const user = await User.findById(req.params.id).select(
       "-password -registrationNumber -email"
     );
-    if (!user) return res.status(404).json({ success: false, message: "User not found." });
+    if (!user) return respondNotFound(res);
 
     const recentCases = await RescueCase.find({ reportedBy: user._id, status: "rescued" })
       .sort("-rescuedAt")
@@ -59,6 +62,7 @@ router.put("/profile", protect, async (req, res, next) => {
       new: true,
       runValidators: true,
     });
+    if (!user) return respondNotFound(res);
 
     res.json({ success: true, data: user.toPublicProfile() });
   } catch (err) {
@@ -78,6 +82,7 @@ router.post("/avatar", protect, uploadAvatar.single("avatar"), async (req, res, 
       { avatar: req.file.path },
       { new: true }
     );
+    if (!user) return respondNotFound(res);
 
     res.json({ success: true, avatar: user.avatar });
   } catch (err) {
