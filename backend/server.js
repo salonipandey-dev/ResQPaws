@@ -75,6 +75,7 @@ app.use("/api/cases", caseRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoutes);
 
+
 // Not found handler
 app.use((req, res) => {
   res.status(404).json({
