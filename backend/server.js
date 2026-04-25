@@ -90,9 +90,6 @@ app.use("/api/cases", caseRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoutes);
 
-
-
-// Not found handler
 // ── 404 Handler ──────────────────────────────────────
 app.use((req, res) => {
   res.status(404).json({

@@ -437,7 +437,7 @@ router.delete("/:id", protect, async (req, res, next) => {
         message: "You can only delete your case while it is in 'reported' status."
       });
     }
-
+    
     await rescueCase.deleteOne();
 
     res.json({
