@@ -1,0 +1,501 @@
+text,label
+cat severe blood loss roadside near school,CRITICAL
+kitten cannot stand properly near market,HIGH
+stray cat weak and not eating by highway,MEDIUM
+dog cannot stand properly by highway,HIGH
+bird weak and not eating at bus stand,MEDIUM
+puppy minor wound seen at bus stand,MEDIUM
+cow resting under tree near temple,LOW
+stray cat severe blood loss roadside on road,CRITICAL
+cat deep wound on body near market,HIGH
+cat sleeping normally in colony,LOW
+cat resting under tree at bus stand,LOW
+cat broken leg crying at bus stand,HIGH
+bird wing fracture injured near park,HIGH
+cat roaming normally on road,LOW
+street dog bleeding heavily after accident by highway,CRITICAL
+street dog cannot stand properly near temple,HIGH
+street dog weak and not eating in colony,MEDIUM
+bird minor wound seen in colony,MEDIUM
+street dog hit by car not moving at bus stand,CRITICAL
+bird sleeping normally by highway,LOW
+bird severe limp in pain near park,HIGH
+bird small cut on paw near market,MEDIUM
+dog sleeping normally near school,LOW
+dog eating food calmly by highway,LOW
+bird eating food calmly at bus stand,LOW
+cat unable to breathe after trauma at bus stand,CRITICAL
+stray cat wing fracture injured on road,HIGH
+dog resting under tree in colony,LOW
+street dog dehydrated and tired at bus stand,MEDIUM
+bird dehydrated and tired near school,MEDIUM
+bird severe blood loss roadside on road,CRITICAL
+stray cat unable to breathe after trauma near school,CRITICAL
+cat wing fracture injured near park,HIGH
+cat unconscious after crash at bus stand,CRITICAL
+cow minor wound seen near park,MEDIUM
+dog sleeping normally on road,LOW
+kitten roaming normally at bus stand,LOW
+dog sleeping normally at bus stand,LOW
+kitten broken leg crying near temple,HIGH
+street dog unconscious after crash near temple,CRITICAL
+dog eating food calmly at bus stand,LOW
+puppy hit by car not moving near temple,CRITICAL
+kitten wing fracture injured near school,HIGH
+cow severe limp in pain at bus stand,HIGH
+street dog bleeding heavily after accident on road,CRITICAL
+bird cannot stand properly near park,HIGH
+puppy severe blood loss roadside near park,CRITICAL
+cow sleeping normally by highway,LOW
+cat unconscious after crash near temple,CRITICAL
+stray cat minor wound seen near market,MEDIUM
+cat cannot stand properly near park,HIGH
+dog minor wound seen near school,MEDIUM
+cat sleeping normally near school,LOW
+dog small cut on paw near school,MEDIUM
+street dog roaming normally in colony,LOW
+bird unconscious after crash near temple,CRITICAL
+puppy eating food calmly near school,LOW
+cow eating food calmly near market,LOW
+stray cat wing fracture injured near school,HIGH
+kitten wing fracture injured in colony,HIGH
+stray cat unconscious after crash at bus stand,CRITICAL
+street dog dehydrated and tired by highway,MEDIUM
+dog minor wound seen near temple,MEDIUM
+bird small cut on paw in colony,MEDIUM
+puppy deep wound on body near school,HIGH
+stray cat wing fracture injured on road,HIGH
+cow minor wound seen near park,MEDIUM
+cow broken leg crying near temple,HIGH
+bird cannot stand properly near park,HIGH
+stray cat deep wound on body near temple,HIGH
+bird cannot stand properly near market,HIGH
+kitten eating food calmly at bus stand,LOW
+stray cat severe blood loss roadside near market,CRITICAL
+stray cat wing fracture injured near school,HIGH
+bird wing fracture injured near park,HIGH
+stray cat hit by car not moving near park,CRITICAL
+kitten deep wound on body near market,HIGH
+cow walking fine near market,LOW
+dog roaming normally near school,LOW
+stray cat unconscious after crash in colony,CRITICAL
+stray cat roaming normally near school,LOW
+cow walking fine on road,LOW
+stray cat bleeding heavily after accident on road,CRITICAL
+cat small cut on paw at bus stand,MEDIUM
+street dog eating food calmly near school,LOW
+cow severe limp in pain on road,HIGH
+cat wing fracture injured at bus stand,HIGH
+cow hit by car not moving near temple,CRITICAL
+bird bleeding heavily after accident near park,CRITICAL
+cat resting under tree near temple,LOW
+street dog severe limp in pain at bus stand,HIGH
+cow minor wound seen by highway,MEDIUM
+dog wing fracture injured by highway,HIGH
+kitten severe blood loss roadside in colony,CRITICAL
+dog severe blood loss roadside near park,CRITICAL
+stray cat cannot stand properly near market,HIGH
+dog sleeping normally by highway,LOW
+street dog resting under tree near park,LOW
+stray cat walking fine in colony,LOW
+kitten severe limp in pain near park,HIGH
+bird small cut on paw at bus stand,MEDIUM
+stray cat minor wound seen near school,MEDIUM
+street dog eating food calmly at bus stand,LOW
+kitten walking fine on road,LOW
+cat small cut on paw near temple,MEDIUM
+bird small cut on paw on road,MEDIUM
+puppy walking fine near temple,LOW
+dog small cut on paw near school,MEDIUM
+cow cannot stand properly in colony,HIGH
+dog broken leg crying by highway,HIGH
+stray cat walking fine near school,LOW
+street dog hit by car not moving on road,CRITICAL
+puppy unconscious after crash on road,CRITICAL
+street dog cannot stand properly near temple,HIGH
+kitten resting under tree near park,LOW
+puppy severe blood loss roadside by highway,CRITICAL
+cat walking fine on road,LOW
+cat bleeding heavily after accident in colony,CRITICAL
+puppy bleeding heavily after accident by highway,CRITICAL
+bird hit by car not moving at bus stand,CRITICAL
+stray cat broken leg crying in colony,HIGH
+stray cat unable to breathe after trauma by highway,CRITICAL
+bird broken leg crying in colony,HIGH
+puppy eating food calmly in colony,LOW
+cow walking fine near temple,LOW
+street dog hit by car not moving in colony,CRITICAL
+bird minor wound seen near park,MEDIUM
+puppy severe limp in pain in colony,HIGH
+street dog weak and not eating by highway,MEDIUM
+puppy weak and not eating at bus stand,MEDIUM
+cow weak and not eating near school,MEDIUM
+street dog unable to breathe after trauma on road,CRITICAL
+dog sleeping normally near park,LOW
+cow roaming normally near market,LOW
+bird weak and not eating on road,MEDIUM
+dog resting under tree near park,LOW
+dog severe blood loss roadside in colony,CRITICAL
+cow eating food calmly near school,LOW
+dog wing fracture injured near park,HIGH
+cow roaming normally in colony,LOW
+street dog unconscious after crash in colony,CRITICAL
+cat wing fracture injured near market,HIGH
+cow small cut on paw near temple,MEDIUM
+street dog small cut on paw near temple,MEDIUM
+bird deep wound on body near market,HIGH
+cat wing fracture injured at bus stand,HIGH
+puppy limping slowly near school,MEDIUM
+stray cat walking fine near temple,LOW
+street dog limping slowly near temple,MEDIUM
+bird limping slowly by highway,MEDIUM
+cat sleeping normally at bus stand,LOW
+dog weak and not eating by highway,MEDIUM
+dog wing fracture injured by highway,HIGH
+puppy sleeping normally near market,LOW
+cat sleeping normally near temple,LOW
+dog minor wound seen by highway,MEDIUM
+stray cat sleeping normally on road,LOW
+cow bleeding heavily after accident in colony,CRITICAL
+kitten wing fracture injured on road,HIGH
+kitten severe blood loss roadside near market,CRITICAL
+street dog eating food calmly at bus stand,LOW
+puppy unconscious after crash by highway,CRITICAL
+cow eating food calmly near temple,LOW
+bird eating food calmly at bus stand,LOW
+street dog resting under tree at bus stand,LOW
+cow unable to breathe after trauma in colony,CRITICAL
+stray cat walking fine in colony,LOW
+bird weak and not eating by highway,MEDIUM
+cat dehydrated and tired by highway,MEDIUM
+kitten walking fine near school,LOW
+street dog unconscious after crash in colony,CRITICAL
+kitten cannot stand properly in colony,HIGH
+stray cat limping slowly on road,MEDIUM
+cat unconscious after crash on road,CRITICAL
+kitten deep wound on body on road,HIGH
+bird roaming normally near market,LOW
+dog cannot stand properly in colony,HIGH
+kitten walking fine at bus stand,LOW
+kitten severe blood loss roadside near school,CRITICAL
+cow walking fine near park,LOW
+street dog limping slowly in colony,MEDIUM
+street dog dehydrated and tired near school,MEDIUM
+street dog eating food calmly near temple,LOW
+stray cat hit by car not moving near school,CRITICAL
+stray cat hit by car not moving at bus stand,CRITICAL
+kitten wing fracture injured near school,HIGH
+kitten unable to breathe after trauma on road,CRITICAL
+puppy eating food calmly on road,LOW
+stray cat eating food calmly near school,LOW
+kitten unconscious after crash near temple,CRITICAL
+puppy dehydrated and tired near market,MEDIUM
+kitten wing fracture injured at bus stand,HIGH
+cat hit by car not moving near school,CRITICAL
+cat dehydrated and tired on road,MEDIUM
+dog wing fracture injured at bus stand,HIGH
+dog resting under tree near temple,LOW
+cat unable to breathe after trauma by highway,CRITICAL
+puppy unable to breathe after trauma on road,CRITICAL
+bird deep wound on body near temple,HIGH
+dog bleeding heavily after accident at bus stand,CRITICAL
+cat severe limp in pain at bus stand,HIGH
+street dog unable to breathe after trauma by highway,CRITICAL
+dog roaming normally on road,LOW
+kitten deep wound on body on road,HIGH
+bird wing fracture injured in colony,HIGH
+kitten unable to breathe after trauma near market,CRITICAL
+stray cat limping slowly in colony,MEDIUM
+stray cat walking fine near temple,LOW
+cat dehydrated and tired near park,MEDIUM
+dog severe blood loss roadside in colony,CRITICAL
+dog cannot stand properly near park,HIGH
+kitten eating food calmly near school,LOW
+dog minor wound seen on road,MEDIUM
+puppy sleeping normally in colony,LOW
+street dog small cut on paw near park,MEDIUM
+stray cat unconscious after crash near temple,CRITICAL
+cow weak and not eating near school,MEDIUM
+cow dehydrated and tired near school,MEDIUM
+kitten resting under tree near school,LOW
+puppy dehydrated and tired near park,MEDIUM
+cat severe blood loss roadside at bus stand,CRITICAL
+stray cat minor wound seen at bus stand,MEDIUM
+dog dehydrated and tired in colony,MEDIUM
+cat wing fracture injured on road,HIGH
+cat cannot stand properly near park,HIGH
+puppy broken leg crying in colony,HIGH
+cow bleeding heavily after accident in colony,CRITICAL
+dog severe blood loss roadside on road,CRITICAL
+puppy unconscious after crash near park,CRITICAL
+cow dehydrated and tired near school,MEDIUM
+cow roaming normally by highway,LOW
+bird bleeding heavily after accident at bus stand,CRITICAL
+stray cat small cut on paw near park,MEDIUM
+stray cat resting under tree near temple,LOW
+kitten deep wound on body near temple,HIGH
+puppy unconscious after crash near park,CRITICAL
+cat broken leg crying at bus stand,HIGH
+stray cat dehydrated and tired at bus stand,MEDIUM
+puppy cannot stand properly near school,HIGH
+cow roaming normally near school,LOW
+dog severe limp in pain near park,HIGH
+cat eating food calmly near temple,LOW
+kitten minor wound seen near park,MEDIUM
+puppy walking fine in colony,LOW
+stray cat small cut on paw on road,MEDIUM
+kitten minor wound seen on road,MEDIUM
+dog unconscious after crash near park,CRITICAL
+stray cat bleeding heavily after accident on road,CRITICAL
+puppy wing fracture injured near school,HIGH
+dog sleeping normally by highway,LOW
+bird dehydrated and tired in colony,MEDIUM
+kitten cannot stand properly in colony,HIGH
+cat roaming normally near temple,LOW
+cow eating food calmly near temple,LOW
+kitten bleeding heavily after accident by highway,CRITICAL
+kitten minor wound seen near park,MEDIUM
+bird cannot stand properly in colony,HIGH
+bird severe blood loss roadside at bus stand,CRITICAL
+puppy resting under tree near school,LOW
+kitten wing fracture injured near school,HIGH
+kitten small cut on paw on road,MEDIUM
+bird wing fracture injured near school,HIGH
+cat unconscious after crash near school,CRITICAL
+street dog sleeping normally by highway,LOW
+dog bleeding heavily after accident by highway,CRITICAL
+kitten wing fracture injured by highway,HIGH
+cow minor wound seen in colony,MEDIUM
+kitten hit by car not moving near park,CRITICAL
+cow bleeding heavily after accident near park,CRITICAL
+kitten limping slowly on road,MEDIUM
+cow unable to breathe after trauma by highway,CRITICAL
+bird broken leg crying by highway,HIGH
+bird limping slowly near market,MEDIUM
+cow minor wound seen on road,MEDIUM
+dog hit by car not moving by highway,CRITICAL
+kitten bleeding heavily after accident near school,CRITICAL
+dog deep wound on body by highway,HIGH
+street dog bleeding heavily after accident on road,CRITICAL
+kitten broken leg crying in colony,HIGH
+cow cannot stand properly on road,HIGH
+cow sleeping normally at bus stand,LOW
+stray cat dehydrated and tired near school,MEDIUM
+puppy bleeding heavily after accident near school,CRITICAL
+dog hit by car not moving near school,CRITICAL
+stray cat severe limp in pain near school,HIGH
+dog broken leg crying near temple,HIGH
+kitten resting under tree near school,LOW
+dog roaming normally on road,LOW
+cat unconscious after crash near market,CRITICAL
+cat unable to breathe after trauma near school,CRITICAL
+dog resting under tree near temple,LOW
+dog severe limp in pain near temple,HIGH
+bird bleeding heavily after accident at bus stand,CRITICAL
+cat unconscious after crash near temple,CRITICAL
+dog sleeping normally near park,LOW
+cow minor wound seen on road,MEDIUM
+cow dehydrated and tired in colony,MEDIUM
+dog cannot stand properly in colony,HIGH
+stray cat wing fracture injured near park,HIGH
+cat sleeping normally near temple,LOW
+puppy dehydrated and tired near park,MEDIUM
+puppy small cut on paw at bus stand,MEDIUM
+cat sleeping normally by highway,LOW
+puppy broken leg crying at bus stand,HIGH
+street dog eating food calmly near temple,LOW
+stray cat dehydrated and tired by highway,MEDIUM
+bird sleeping normally by highway,LOW
+stray cat bleeding heavily after accident near park,CRITICAL
+cat sleeping normally in colony,LOW
+kitten unconscious after crash at bus stand,CRITICAL
+bird deep wound on body near temple,HIGH
+bird unconscious after crash near market,CRITICAL
+dog walking fine near school,LOW
+cow severe limp in pain near market,HIGH
+bird limping slowly in colony,MEDIUM
+street dog limping slowly near school,MEDIUM
+stray cat roaming normally at bus stand,LOW
+stray cat deep wound on body near park,HIGH
+stray cat unconscious after crash near park,CRITICAL
+cat hit by car not moving in colony,CRITICAL
+bird wing fracture injured near park,HIGH
+dog hit by car not moving on road,CRITICAL
+cat resting under tree near school,LOW
+cow sleeping normally near school,LOW
+street dog limping slowly on road,MEDIUM
+stray cat minor wound seen near temple,MEDIUM
+stray cat limping slowly on road,MEDIUM
+dog severe blood loss roadside by highway,CRITICAL
+dog severe limp in pain near school,HIGH
+dog wing fracture injured at bus stand,HIGH
+cat resting under tree near market,LOW
+stray cat deep wound on body near market,HIGH
+stray cat walking fine near market,LOW
+dog broken leg crying near park,HIGH
+cat minor wound seen near temple,MEDIUM
+kitten limping slowly near temple,MEDIUM
+bird weak and not eating near park,MEDIUM
+bird walking fine at bus stand,LOW
+puppy deep wound on body on road,HIGH
+cat eating food calmly at bus stand,LOW
+street dog deep wound on body at bus stand,HIGH
+street dog minor wound seen by highway,MEDIUM
+cow weak and not eating at bus stand,MEDIUM
+stray cat small cut on paw on road,MEDIUM
+bird severe limp in pain near temple,HIGH
+dog walking fine at bus stand,LOW
+puppy unable to breathe after trauma in colony,CRITICAL
+dog resting under tree on road,LOW
+street dog sleeping normally near school,LOW
+bird minor wound seen on road,MEDIUM
+dog deep wound on body near market,HIGH
+puppy wing fracture injured at bus stand,HIGH
+stray cat resting under tree at bus stand,LOW
+dog sleeping normally at bus stand,LOW
+puppy roaming normally near market,LOW
+puppy severe limp in pain in colony,HIGH
+street dog deep wound on body near park,HIGH
+puppy weak and not eating at bus stand,MEDIUM
+stray cat small cut on paw at bus stand,MEDIUM
+dog wing fracture injured by highway,HIGH
+bird broken leg crying near park,HIGH
+bird sleeping normally in colony,LOW
+cow walking fine near school,LOW
+cat deep wound on body near school,HIGH
+kitten minor wound seen near park,MEDIUM
+puppy minor wound seen at bus stand,MEDIUM
+street dog unconscious after crash near market,CRITICAL
+cat unconscious after crash by highway,CRITICAL
+cat unable to breathe after trauma in colony,CRITICAL
+bird unable to breathe after trauma near park,CRITICAL
+kitten dehydrated and tired at bus stand,MEDIUM
+puppy weak and not eating near school,MEDIUM
+bird wing fracture injured at bus stand,HIGH
+dog roaming normally on road,LOW
+kitten minor wound seen by highway,MEDIUM
+stray cat broken leg crying near park,HIGH
+kitten unable to breathe after trauma on road,CRITICAL
+dog weak and not eating near school,MEDIUM
+street dog minor wound seen near park,MEDIUM
+cow dehydrated and tired near temple,MEDIUM
+cat cannot stand properly at bus stand,HIGH
+cow weak and not eating in colony,MEDIUM
+bird bleeding heavily after accident near school,CRITICAL
+stray cat roaming normally on road,LOW
+puppy dehydrated and tired at bus stand,MEDIUM
+cat hit by car not moving near temple,CRITICAL
+kitten severe blood loss roadside near market,CRITICAL
+cow roaming normally near school,LOW
+street dog deep wound on body near temple,HIGH
+cow limping slowly on road,MEDIUM
+puppy eating food calmly on road,LOW
+kitten minor wound seen in colony,MEDIUM
+street dog wing fracture injured on road,HIGH
+puppy eating food calmly near market,LOW
+street dog dehydrated and tired near temple,MEDIUM
+puppy broken leg crying by highway,HIGH
+stray cat severe blood loss roadside near park,CRITICAL
+dog unable to breathe after trauma near market,CRITICAL
+stray cat broken leg crying on road,HIGH
+stray cat broken leg crying near school,HIGH
+cow unconscious after crash near school,CRITICAL
+bird unconscious after crash in colony,CRITICAL
+kitten weak and not eating near market,MEDIUM
+bird small cut on paw at bus stand,MEDIUM
+cow severe blood loss roadside in colony,CRITICAL
+stray cat limping slowly at bus stand,MEDIUM
+stray cat small cut on paw near school,MEDIUM
+cow minor wound seen near park,MEDIUM
+street dog eating food calmly in colony,LOW
+cow limping slowly in colony,MEDIUM
+dog dehydrated and tired by highway,MEDIUM
+dog wing fracture injured near school,HIGH
+cow sleeping normally near market,LOW
+street dog unable to breathe after trauma on road,CRITICAL
+puppy unable to breathe after trauma near park,CRITICAL
+dog weak and not eating at bus stand,MEDIUM
+puppy sleeping normally near school,LOW
+stray cat cannot stand properly near school,HIGH
+cat bleeding heavily after accident on road,CRITICAL
+cow unconscious after crash near temple,CRITICAL
+cow severe blood loss roadside at bus stand,CRITICAL
+cow small cut on paw near school,MEDIUM
+cat severe blood loss roadside by highway,CRITICAL
+street dog severe blood loss roadside near temple,CRITICAL
+cow limping slowly on road,MEDIUM
+stray cat broken leg crying by highway,HIGH
+cow limping slowly near school,MEDIUM
+cow limping slowly near school,MEDIUM
+cow roaming normally near temple,LOW
+cat sleeping normally in colony,LOW
+puppy hit by car not moving near market,CRITICAL
+street dog bleeding heavily after accident near school,CRITICAL
+dog eating food calmly near market,LOW
+dog small cut on paw on road,MEDIUM
+kitten resting under tree near temple,LOW
+stray cat dehydrated and tired on road,MEDIUM
+kitten unconscious after crash by highway,CRITICAL
+street dog deep wound on body on road,HIGH
+stray cat roaming normally on road,LOW
+cow resting under tree on road,LOW
+bird hit by car not moving near school,CRITICAL
+kitten walking fine on road,LOW
+kitten deep wound on body at bus stand,HIGH
+street dog weak and not eating near park,MEDIUM
+cow cannot stand properly near temple,HIGH
+cat small cut on paw in colony,MEDIUM
+stray cat deep wound on body near park,HIGH
+puppy bleeding heavily after accident near temple,CRITICAL
+stray cat hit by car not moving by highway,CRITICAL
+stray cat eating food calmly by highway,LOW
+puppy deep wound on body by highway,HIGH
+cat unconscious after crash near market,CRITICAL
+dog dehydrated and tired in colony,MEDIUM
+cat wing fracture injured near temple,HIGH
+cow unable to breathe after trauma near temple,CRITICAL
+cow hit by car not moving near temple,CRITICAL
+puppy resting under tree near school,LOW
+street dog limping slowly in colony,MEDIUM
+puppy unconscious after crash near market,CRITICAL
+kitten unable to breathe after trauma in colony,CRITICAL
+cat deep wound on body near park,HIGH
+dog severe blood loss roadside near school,CRITICAL
+cow walking fine on road,LOW
+dog cannot stand properly near market,HIGH
+cat severe limp in pain near park,HIGH
+puppy bleeding heavily after accident near school,CRITICAL
+stray cat bleeding heavily after accident near market,CRITICAL
+dog dehydrated and tired on road,MEDIUM
+kitten bleeding heavily after accident near temple,CRITICAL
+kitten hit by car not moving near school,CRITICAL
+cat limping slowly near park,MEDIUM
+bird eating food calmly near temple,LOW
+cat severe blood loss roadside by highway,CRITICAL
+street dog weak and not eating near market,MEDIUM
+cat limping slowly near market,MEDIUM
+stray cat dehydrated and tired on road,MEDIUM
+dog broken leg crying near school,HIGH
+street dog resting under tree near school,LOW
+street dog minor wound seen near school,MEDIUM
+stray cat unable to breathe after trauma near temple,CRITICAL
+kitten dehydrated and tired near park,MEDIUM
+street dog sleeping normally on road,LOW
+cow wing fracture injured near temple,HIGH
+kitten unable to breathe after trauma at bus stand,CRITICAL
+stray cat severe blood loss roadside by highway,CRITICAL
+dog severe limp in pain near school,HIGH
+cow broken leg crying on road,HIGH
+cat cannot stand properly in colony,HIGH
+street dog walking fine on road,LOW
+cat small cut on paw near market,MEDIUM
+kitten broken leg crying near school,HIGH
+kitten roaming normally near park,LOW
+puppy broken leg crying near market,HIGH
+cow severe limp in pain on road,HIGH
+stray cat walking fine near school,LOW
+stray cat dehydrated and tired near market,MEDIUM
+street dog wing fracture injured in colony,HIGH
+street dog roaming normally by highway,LOW
+kitten dehydrated and tired by highway,MEDIUM
+puppy cannot stand properly on road,HIGH
