@@ -1,24 +1,10 @@
-from app.services.nlp_service import analyze_keywords
+from app.ml.inference.predict_severity import predict
 
 def predict_severity(text: str):
-
-    score, reasons = analyze_keywords(text)
-
-    if score >= 80:
-        priority = "CRITICAL"
-    elif score >= 60:
-        priority = "HIGH"
-    elif score >= 30:
-        priority = "MEDIUM"
-    else:
-        priority = "LOW"
-
-    confidence = round(min(score / 100, 0.99), 2)
+    result = predict(text)
 
     return {
         "input_text": text,
-        "score": score,
-        "priority": priority,
-        "confidence": confidence,
-        "reasons": reasons
+        "priority": result["priority"],
+        "confidence": result["confidence"]
     }
