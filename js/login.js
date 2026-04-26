@@ -86,8 +86,7 @@ if (loginForm) {
       }
     }
 
-    const users = window.ResQState ? ResQState.getUsers() : [];
-    const account = users.find((user) => user.email === email);
+const users = window.ResQState?.getUsers?.() || [];    const account = users.find((user) => user.email === email);
 
     if (!account) {
       showMessage("No account found. Please create an account first.");

@@ -31,8 +31,7 @@ if (requestForm) {
     event.preventDefault();
 
     const email = normalizeEmail(resetEmail.value);
-    const users = window.ResQState ? ResQState.getUsers() : [];
-    const exists = users.some((user) => user.email === email);
+const users = window.ResQState?.getUsers?.() || [];    const exists = users.some((user) => user.email === email);
 
     if (!email) {
       showToast("Please enter your registered email.");
@@ -92,8 +91,7 @@ if (resetForm) {
       return;
     }
 
-    const users = window.ResQState ? ResQState.getUsers() : [];
-    const nextUsers = users.map((user) =>
+const users = window.ResQState?.getUsers?.() || [];    const nextUsers = users.map((user) =>
       user.email === payload.email ? { ...user, password: newPassword.value } : user
     );
 
