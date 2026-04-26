@@ -1,9 +1,16 @@
 from fastapi import APIRouter
-from app.schemas.request import DuplicateRequest
-from app.services.duplicate_service import check_duplicate
+from pydantic import BaseModel
+from app.services.duplicate_service import detect_duplicate
 
-router = APIRouter(prefix="/duplicate", tags=["Duplicate"])
+router = APIRouter(
+    prefix="/duplicate",
+    tags=["Duplicate Detection"]
+)
+
+class DuplicateRequest(BaseModel):
+    text: str
+    location: str
 
 @router.post("/check")
-def duplicate_check(data: DuplicateRequest):
-    return check_duplicate(data.text, data.location)
+def check_report(request: DuplicateRequest):
+    return detect_duplicate(request.text, request.location)
