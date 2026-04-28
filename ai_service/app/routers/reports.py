@@ -3,7 +3,7 @@ from app.schemas.request import FullReportRequest
 from app.services.trust_service import calculate_trust
 from app.services.triage_service import predict_severity
 from app.services.duplicate_service import check_duplicate
-from app.services.rag_service import get_first_aid
+from ai_service.app.services.firstaid_service import get_first_aid
 
 router = APIRouter(prefix="/reports", tags=["Reports"])
 

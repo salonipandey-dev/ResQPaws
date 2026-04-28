@@ -1,9 +1,15 @@
 from fastapi import APIRouter
-from app.schemas.request import FirstAidRequest
-from app.services.rag_service import get_first_aid
+from pydantic import BaseModel
+from app.services.firstaid_service import get_first_aid
 
-router = APIRouter(prefix="/firstaid", tags=["First Aid"])
+router = APIRouter(
+    prefix="/firstaid",
+    tags=["First Aid Intelligence"]
+)
 
-@router.post("/help")
-def first_aid(data: FirstAidRequest):
-    return get_first_aid(data.issue)
+class AidRequest(BaseModel):
+    text: str
+
+@router.post("/guide")
+def guide(request: AidRequest):
+    return get_first_aid(request.text)
