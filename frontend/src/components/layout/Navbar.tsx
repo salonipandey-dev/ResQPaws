@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Logo } from "./Logo";
 import { ThemeToggle } from "./ThemeToggle";
 import { cn } from "@/lib/utils";
@@ -65,15 +65,15 @@ export function Navbar() {
         </nav>
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex rounded-full">
-            <Link href="/login">Login</Link>
-          </Button>
-          <Button asChild size="sm" className="hidden sm:inline-flex rounded-full shadow-glow">
-            <Link href="/login">Get Started</Link>
-          </Button>
-          <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setOpen(!open)} aria-label="Menu">
+          <Link href="/login" className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "hidden sm:inline-flex rounded-full")}>Login</Link>
+          <Link href="/login" className={cn(buttonVariants({ size: "sm" }), "hidden sm:inline-flex rounded-full shadow-glow")}>Get Started</Link>
+          <button
+            type="button"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background/80 text-foreground shadow-sm transition hover:bg-background md:hidden"
+            onClick={() => setOpen((prev) => !prev)}
+          >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </Button>
+          </button>
         </div>
       </div>
       {open && (

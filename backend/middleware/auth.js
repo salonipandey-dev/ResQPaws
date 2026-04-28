@@ -28,7 +28,8 @@ const protect = async (req, res, next) => {
 // Usage: authorize("admin", "ngo")
 const authorize = (...roles) => {
   return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
+    const normalizedRole = req.user.role === "citizen" ? "user" : req.user.role;
+    if (!roles.includes(normalizedRole)) {
       return res.status(403).json({
         success: false,
         message: `Access denied. Required role(s): ${roles.join(", ")}.`,

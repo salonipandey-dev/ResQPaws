@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
-import { Github, Twitter, Instagram, Mail } from "lucide-react";
+import { Mail } from "lucide-react";
+import { footerContent } from "@/data/content";
 
 export function Footer() {
   return (
@@ -8,14 +9,10 @@ export function Footer() {
       <div className="container py-14 grid gap-10 md:grid-cols-4">
         <div className="md:col-span-2">
           <Logo />
-          <p className="mt-4 max-w-sm text-sm text-muted-foreground">
-            ResQPaws is a 24/7 AI-powered rescue network connecting concerned citizens, NGOs and volunteers to save injured animals — fast.
-          </p>
-          <div className="mt-5 flex gap-3 text-muted-foreground">
-            <Link href="#" className="hover:text-primary transition"><Twitter className="h-4 w-4" /></Link>
-            <Link href="#" className="hover:text-primary transition"><Instagram className="h-4 w-4" /></Link>
-            <Link href="#" className="hover:text-primary transition"><Github className="h-4 w-4" /></Link>
-            <Link href="#" className="hover:text-primary transition"><Mail className="h-4 w-4" /></Link>
+          <p className="mt-4 max-w-sm text-sm text-muted-foreground">{footerContent.blurb}</p>
+          <div className="mt-5 flex items-center gap-2 text-sm text-muted-foreground">
+            <Mail className="h-4 w-4" />
+            <a href={`mailto:${footerContent.contact}`} className="hover:text-primary transition">{footerContent.contact}</a>
           </div>
         </div>
         <div>
@@ -37,7 +34,7 @@ export function Footer() {
       </div>
       <div className="border-t border-border">
         <div className="container py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-muted-foreground">
-          <p>© {new Date().getFullYear()} ResQPaws. Made with care for every paw.</p>
+          <p>Â© {new Date().getFullYear()} ResQPaws.</p>
           <div className="flex gap-4"><Link href="#">Privacy</Link><Link href="#">Terms</Link></div>
         </div>
       </div>

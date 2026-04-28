@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/layout/Logo";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export type NavItem = { href: string; label: string; icon: any };
 
@@ -73,12 +73,12 @@ export function AppShell({ children, role }: { children: React.ReactNode; role: 
         <header className="sticky top-0 z-30 backdrop-blur-xl bg-background/70 border-b border-border">
           <div className="flex h-16 items-center justify-between px-5">
             <div>
-              <p className="font-display text-xl font-bold tracking-tight capitalize">{nav.find(n => n.href === pathname)?.label || "Dashboard"}</p>
-              <p className="text-xs text-muted-foreground">Welcome back, hero 🐾</p>
+              <p className="font-display text-xl font-bold tracking-tight capitalize">{nav.find((n) => n.href === pathname)?.label || "Dashboard"}</p>
+              <p className="text-xs text-muted-foreground">Welcome back.</p>
             </div>
             <div className="flex items-center gap-2">
               <ThemeToggle />
-              <Avatar className="h-9 w-9"><AvatarImage src="https://i.pravatar.cc/80?img=15" /><AvatarFallback>R</AvatarFallback></Avatar>
+              <Avatar className="h-9 w-9"><AvatarFallback>U</AvatarFallback></Avatar>
             </div>
           </div>
         </header>

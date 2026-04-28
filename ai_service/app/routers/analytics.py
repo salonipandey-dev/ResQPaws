@@ -1,8 +1,15 @@
 from fastapi import APIRouter
-from app.services.hotspot_service import generate_hotspots
+from pydantic import BaseModel
+from app.services.trust_service import spam_score
 
-router = APIRouter(prefix="/analytics", tags=["Analytics"])
+router = APIRouter(
+    prefix="/trust",
+    tags=["Trust / Spam Detection"]
+)
 
-@router.get("/hotspots")
-def hotspots():
-    return generate_hotspots()
+class TrustRequest(BaseModel):
+    text: str
+
+@router.post("/check")
+def check_trust(request: TrustRequest):
+    return spam_score(request.text)

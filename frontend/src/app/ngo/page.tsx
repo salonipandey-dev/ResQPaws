@@ -3,18 +3,18 @@ import { Activity, ListChecks, ShieldCheck, Users2 } from "lucide-react";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
 
 const K = [
-  { l: "Active cases", v: "23", i: ListChecks },
-  { l: "Volunteers", v: "148", i: Users2 },
-  { l: "Healed today", v: "12", i: ShieldCheck },
-  { l: "Response avg", v: "7m", i: Activity },
+  { l: "Active cases", v: "0", i: ListChecks },
+  { l: "Volunteers available", v: "0", i: Users2 },
+  { l: "Cases resolved today", v: "0", i: ShieldCheck },
+  { l: "Average response", v: "--", i: Activity },
 ];
-const D = Array.from({ length: 14 }).map((_, i) => ({ d: i+1, v: 4 + Math.round(Math.sin(i)*4 + Math.random()*5) }));
+const D = Array.from({ length: 14 }).map((_, i) => ({ d: i + 1, v: 0 }));
 
 export default function NgoOverview() {
   return (
     <div className="space-y-6">
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {K.map(k => (
+        {K.map((k) => (
           <div key={k.l} className="rounded-2xl border border-border bg-card p-5">
             <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary grid place-items-center"><k.i className="h-5 w-5" /></div>
             <p className="mt-4 font-display text-3xl font-bold">{k.v}</p>

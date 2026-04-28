@@ -8,8 +8,8 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "sw
 const display = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-display", display: "swap" });
 
 export const metadata: Metadata = {
-  title: "ResQPaws — AI-powered Animal Rescue Network",
-  description: "Help injured animals fast. Report rescues, track cases, and connect with NGOs in your city — powered by AI.",
+  title: "ResQPaws - Animal Rescue Coordination",
+  description: "Report distressed animals, connect with verified responders, and track case progress.",
   icons: { icon: "/favicon.ico" },
 };
 

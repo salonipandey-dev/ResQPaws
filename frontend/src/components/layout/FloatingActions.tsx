@@ -13,7 +13,6 @@ export function FloatingActions() {
 
   return (
     <>
-      {/* Desktop stacked buttons */}
       <div className="hidden sm:flex fixed bottom-6 right-6 z-40 flex-col gap-3">
         <FloatBtn
           onClick={() => setEmergencyOpen(true)}
@@ -24,13 +23,12 @@ export function FloatingActions() {
         />
         <FloatBtn
           onClick={() => setChatOpen(true)}
-          label="AI Assistant"
+          label="Rescue Guide"
           tone="primary"
           icon={<MessageCircle className="h-5 w-5" />}
         />
       </div>
 
-      {/* Mobile FAB */}
       <div className="sm:hidden fixed bottom-5 right-5 z-40">
         <AnimatePresence>
           {mobileExpanded && (
@@ -41,7 +39,7 @@ export function FloatingActions() {
               className="mb-3 flex flex-col gap-3"
             >
               <FloatBtn onClick={() => { setEmergencyOpen(true); setMobileExpanded(false); }} label="Emergency" tone="danger" icon={<Siren className="h-5 w-5" />} small />
-              <FloatBtn onClick={() => { setChatOpen(true); setMobileExpanded(false); }} label="Assistant" tone="primary" icon={<MessageCircle className="h-5 w-5" />} small />
+              <FloatBtn onClick={() => { setChatOpen(true); setMobileExpanded(false); }} label="Rescue Guide" tone="primary" icon={<MessageCircle className="h-5 w-5" />} small />
             </motion.div>
           )}
         </AnimatePresence>

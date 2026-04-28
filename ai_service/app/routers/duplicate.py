@@ -10,7 +10,14 @@ router = APIRouter(
 class DuplicateRequest(BaseModel):
     text: str
     location: str
+    lat: float
+    lng: float
 
 @router.post("/check")
 def check_report(request: DuplicateRequest):
-    return detect_duplicate(request.text, request.location)
+    return detect_duplicate(
+        request.text,
+        request.location,
+        request.lat,
+        request.lng
+    )

@@ -31,8 +31,8 @@ const userSchema = new mongoose.Schema(
     // ── Role ───────────────────────────────────────────────
     role: {
       type: String,
-      enum: ["citizen", "volunteer", "ngo", "admin"],
-      default: "citizen",
+      enum: ["user", "citizen", "volunteer", "ngo", "admin"],
+      default: "user",
     },
 
     // ── Profile ────────────────────────────────────────────
