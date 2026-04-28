@@ -4,9 +4,7 @@ dist/
 *.log
 .env
 .env.*
-!.env.example
 backend/.env
 backend/.env.*
-!backend/.env.example
 backend/node_modules
 node_modules
