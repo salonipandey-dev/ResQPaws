@@ -1,13 +1,19 @@
 import axios, { AxiosError } from "axios";
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+const aiBaseURL = process.env.NEXT_PUBLIC_AI_URL || "http://localhost:8000";
 
 export const api = axios.create({
   baseURL,
   headers: { "Content-Type": "application/json" },
 });
 
-api.interceptors.request.use((config) => {
+export const aiClient = axios.create({
+  baseURL: aiBaseURL,
+  headers: { "Content-Type": "application/json" },
+});
+
+const attachAuth = (config: any) => {
   if (typeof window !== "undefined") {
     const token = window.localStorage.getItem("resqpaws_token");
     if (token) {
@@ -15,11 +21,18 @@ api.interceptors.request.use((config) => {
     }
   }
   return config;
-});
+};
+
+api.interceptors.request.use(attachAuth);
+aiClient.interceptors.request.use(attachAuth);
 
 export const getApiErrorMessage = (error: unknown) => {
-  const axiosError = error as AxiosError<{ message?: string }>;
-  return axiosError.response?.data?.message || "Something went wrong. Please try again.";
+  const axiosError = error as AxiosError<{ message?: string; detail?: string }>;
+  return (
+    axiosError.response?.data?.message ||
+    axiosError.response?.data?.detail ||
+    "Something went wrong. Please try again."
+  );
 };
 
 export type AuthPayload = {
@@ -69,4 +82,11 @@ export const rescueApi = {
 
 export const rewardsApi = {
   list: () => api.get("/rewards"),
+};
+
+export const aiApi = {
+  health: () => aiClient.get("/health"),
+  severity: (payload: unknown) => aiClient.post("/severity", payload),
+  duplicate: (payload: unknown) => aiClient.post("/duplicate", payload),
+  firstAid: (payload: unknown) => aiClient.post("/firstaid", payload),
 };
