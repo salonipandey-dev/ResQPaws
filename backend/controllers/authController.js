@@ -17,13 +17,21 @@ exports.register = async (req, res, next) => {
     ensureValid(req);
 
     const { name, email, password, role } = req.body;
-    const existing = await User.findOne({ email: email.toLowerCase() });
+    const normalizedEmail = email.toLowerCase().trim();
+
+    const existing = await User.findOne({ email: normalizedEmail });
     if (existing) throw new ApiError(409, "Email already registered");
 
-    const allowedRoles = ["user", "ngo", "admin"];
+    // Public signup: only "user" or "ngo". Admin accounts must be created manually in the DB.
+    const allowedRoles = ["user", "ngo"];
     const safeRole = allowedRoles.includes(role) ? role : "user";
 
-    const user = await User.create({ name, email, password, role: safeRole });
+    const user = await User.create({
+      name,
+      email: normalizedEmail,
+      password,
+      role: safeRole,
+    });
     const token = signToken(user._id.toString());
 
     res.status(201).json({
@@ -32,6 +40,10 @@ exports.register = async (req, res, next) => {
       user: user.toPublicProfile(),
     });
   } catch (err) {
+    // Catch the rare race-condition dup-key
+    if (err && err.code === 11000) {
+      return next(new ApiError(409, "Email already registered"));
+    }
     next(err);
   }
 };
@@ -41,9 +53,37 @@ exports.login = async (req, res, next) => {
     ensureValid(req);
 
     const { email, password } = req.body;
-    const user = await User.findOne({ email: email.toLowerCase() }).select("+password");
+    const user = await User.findOne({ email: email.toLowerCase().trim() }).select("+password");
     if (!user || !(await user.matchPassword(password))) {
       throw new ApiError(401, "Invalid email or password");
+    }
+
+    // Admins must use the admin sign-in endpoint
+    if (user.role === "admin") {
+      throw new ApiError(403, "Please sign in via the admin portal.");
+    }
+
+    user.lastLogin = new Date();
+    await user.save();
+
+    const token = signToken(user._id.toString());
+    res.json({ success: true, token, user: user.toPublicProfile() });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.adminLogin = async (req, res, next) => {
+  try {
+    ensureValid(req);
+
+    const { email, password } = req.body;
+    const user = await User.findOne({ email: email.toLowerCase().trim() }).select("+password");
+
+    // Same generic error for missing user, wrong password, AND non-admin role
+    // so attackers can't probe whether an email is an admin account.
+    if (!user || !(await user.matchPassword(password)) || user.role !== "admin") {
+      throw new ApiError(401, "Invalid admin credentials");
     }
 
     user.lastLogin = new Date();

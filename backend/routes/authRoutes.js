@@ -1,17 +1,24 @@
 const express = require("express");
 const { body } = require("express-validator");
-const { register, login, me, updateMe } = require("../controllers/authController");
+const { register, login, adminLogin, me, updateMe } = require("../controllers/authController");
 const { protect } = require("../middleware/auth");
 
 const router = express.Router();
+
+const strongPassword = body("password")
+  .isLength({ min: 8 }).withMessage("Password must be at least 8 characters")
+  .matches(/[A-Z]/).withMessage("Password must contain an uppercase letter")
+  .matches(/[a-z]/).withMessage("Password must contain a lowercase letter")
+  .matches(/[0-9]/).withMessage("Password must contain a number")
+  .matches(/[^A-Za-z0-9]/).withMessage("Password must contain a symbol");
 
 router.post(
   "/register",
   [
     body("name").trim().notEmpty().withMessage("Name is required"),
-    body("email").isEmail().withMessage("Valid email is required"),
-    body("password").isLength({ min: 6 }).withMessage("Password must be at least 6 characters"),
-    body("role").optional().isIn(["user", "ngo", "admin"]).withMessage("Role must be user, ngo, or admin"),
+    body("email").isEmail().withMessage("Valid email is required").normalizeEmail(),
+    strongPassword,
+    body("role").optional().isIn(["user", "ngo"]).withMessage("Role must be user or ngo"),
   ],
   register
 );
@@ -19,10 +26,19 @@ router.post(
 router.post(
   "/login",
   [
-    body("email").isEmail().withMessage("Valid email is required"),
+    body("email").isEmail().withMessage("Valid email is required").normalizeEmail(),
     body("password").notEmpty().withMessage("Password is required"),
   ],
   login
+);
+
+router.post(
+  "/admin-login",
+  [
+    body("email").isEmail().withMessage("Valid email is required").normalizeEmail(),
+    body("password").notEmpty().withMessage("Password is required"),
+  ],
+  adminLogin
 );
 
 router.get("/me", protect, me);

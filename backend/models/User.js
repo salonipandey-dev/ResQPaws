@@ -15,12 +15,13 @@ const userSchema = new mongoose.Schema(
       required: [true, "Email is required"],
       unique: true,
       lowercase: true,
+      trim: true,
       match: [/^\S+@\S+\.\S+$/, "Please enter a valid email"],
     },
     password: {
       type: String,
       required: [true, "Password is required"],
-      minlength: [6, "Password must be at least 6 characters"],
+      minlength: [8, "Password must be at least 8 characters"],
       select: false,
     },
     phone: {
@@ -44,10 +45,10 @@ const userSchema = new mongoose.Schema(
     // ── NGO-specific fields ────────────────────────────────
     organizationName: { type: String, maxlength: 120 },
     registrationNumber: { type: String },
-    isVerified: { type: Boolean, default: false }, // Admin verifies NGOs/volunteers
+    isVerified: { type: Boolean, default: false },
 
     // ── Volunteer-specific ─────────────────────────────────
-    skills: [String], // e.g. ["veterinary", "transport", "first-aid"]
+    skills: [String],
     isAvailable: { type: Boolean, default: true },
 
     // ── Gamification ──────────────────────────────────────
@@ -62,7 +63,7 @@ const userSchema = new mongoose.Schema(
     ],
     totalReports: { type: Number, default: 0 },
     verifiedReports: { type: Number, default: 0 },
-    totalRescues: { type: Number, default: 0 }, // for volunteers/NGOs
+    totalRescues: { type: Number, default: 0 },
 
     // ── Account Status ─────────────────────────────────────
     isActive: { type: Boolean, default: true },

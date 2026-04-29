@@ -29,7 +29,7 @@ export type AuthPayload = {
 
 export type RegisterPayload = AuthPayload & {
   name: string;
-  role?: "user" | "ngo" | "admin";
+  role?: "user" | "ngo";
 };
 
 export type UserProfile = {
@@ -53,6 +53,7 @@ export type RescueSummary = {
 export const authApi = {
   register: (payload: RegisterPayload) => api.post("/auth/register", payload),
   login: (payload: AuthPayload) => api.post("/auth/login", payload),
+  adminLogin: (payload: AuthPayload) => api.post("/auth/admin-login", payload),
   me: () => api.get("/auth/me"),
   updateMe: (payload: Partial<UserProfile>) => api.put("/auth/me", payload),
 };
