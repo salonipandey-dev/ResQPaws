@@ -21,7 +21,7 @@ export default function AdminUsers() {
           {U.map((u, i) => (
             <TableRow key={i}>
               <TableCell><span className="font-medium">{u.n}</span></TableCell>
-              <TableCell><Badge variant="secondary">{u.r}</Badge></TableCell>
+              <TableCell><Badge variant="secondary" className="">{u.r}</Badge></TableCell>
               <TableCell>{u.c}</TableCell>
               <TableCell><span className="text-muted-foreground text-sm">Awaiting live data</span></TableCell>
             </TableRow>
