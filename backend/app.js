@@ -14,7 +14,12 @@ const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
 
-const allowedOrigins = ["http://localhost:3000", "http://127.0.0.1:3000"];
+const defaultOrigins = ["http://localhost:3000", "http://127.0.0.1:3000"];
+const envOrigins = (process.env.CORS_ORIGINS || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+const allowedOrigins = [...new Set([...defaultOrigins, ...envOrigins])];
 
 app.use(helmet());
 app.use(

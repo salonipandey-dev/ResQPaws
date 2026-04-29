@@ -63,3 +63,26 @@ exports.me = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.updateMe = async (req, res, next) => {
+  try {
+    ensureValid(req);
+    const allowedFields = ["name", "phone", "city", "state", "bio"];
+    const updates = {};
+
+    for (const field of allowedFields) {
+      if (req.body[field] !== undefined) {
+        updates[field] = req.body[field];
+      }
+    }
+
+    const user = await User.findByIdAndUpdate(req.user._id, updates, {
+      new: true,
+      runValidators: true,
+    });
+
+    res.json({ success: true, user: user.toPublicProfile() });
+  } catch (err) {
+    next(err);
+  }
+};

@@ -8,8 +8,10 @@ router = APIRouter(
 )
 
 class AidRequest(BaseModel):
-    text: str
+    text: str | None = None
+    issue: str | None = None
 
-@router.post("/guide")
+@router.post("/help")
 def guide(request: AidRequest):
-    return get_first_aid(request.text)
+    content = (request.issue or request.text or "").strip()
+    return get_first_aid(content)

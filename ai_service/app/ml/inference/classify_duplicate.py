@@ -1,15 +1,19 @@
-import pandas as pd
-import joblib
 import math
-from difflib import SequenceMatcher
 from datetime import datetime
-from sentence_transformers import SentenceTransformer
+from difflib import SequenceMatcher
+from pathlib import Path
+
+import joblib
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-embed_model = SentenceTransformer("all-MiniLM-L6-v2")
-severity_model = joblib.load("app/ml/models/severity_model.pkl")
+BASE_DIR = Path(__file__).resolve().parents[3]
+SEVERITY_MODEL_PATH = BASE_DIR / "app" / "ml" / "models" / "severity_model.pkl"
+REPORTS_PATH = BASE_DIR / "data" / "raw" / "reports_history.csv"
 
-df = pd.read_csv("data/raw/reports_history.csv")
+severity_model = joblib.load(SEVERITY_MODEL_PATH)
+df = pd.read_csv(REPORTS_PATH)
 
 stored_texts = df["text"].astype(str).tolist()
 stored_locations = df["location"].astype(str).tolist()
@@ -17,7 +21,8 @@ stored_times = pd.to_datetime(df["timestamp"]).tolist()
 stored_lats = df["lat"].tolist()
 stored_lngs = df["lng"].tolist()
 
-stored_embeddings = embed_model.encode(stored_texts)
+vectorizer = TfidfVectorizer(ngram_range=(1, 2), min_df=1)
+stored_embeddings = vectorizer.fit_transform(stored_texts)
 
 ANIMAL_GROUPS = {
     "dog": ["dog", "puppy", "street dog"],
@@ -79,7 +84,7 @@ def severity_match_score(s1,s2):
     return 0.1
 
 def check_duplicate(new_text,new_location,new_lat,new_lng):
-    new_embedding = embed_model.encode([new_text])
+    new_embedding = vectorizer.transform([new_text])
     scores = cosine_similarity(new_embedding, stored_embeddings)[0]
 
     results = []

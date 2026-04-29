@@ -42,8 +42,14 @@ exports.reportRescue = async (req, res, next) => {
     const severity = severityResp.status === "fulfilled" ? severityResp.value.data : null;
     const duplicate = duplicateResp.status === "fulfilled" ? duplicateResp.value.data : null;
     const firstAid = firstAidResp.status === "fulfilled" ? firstAidResp.value.data : null;
-
-    const aiScore = Number(severity?.score ?? severity?.severity_score ?? 50);
+    const severityLabel = String(severity?.severity || "").toUpperCase();
+    const severityToScore = {
+      LOW: 25,
+      MEDIUM: 50,
+      HIGH: 75,
+      CRITICAL: 95,
+    };
+    const aiScore = Number(severity?.score ?? severity?.severity_score ?? severityToScore[severityLabel] ?? 50);
     const mediaUrl = req.file.path?.startsWith("http")
       ? req.file.path
       : `/uploads/cases/${path.basename(req.file.path || req.file.filename)}`;
@@ -67,11 +73,24 @@ exports.reportRescue = async (req, res, next) => {
           type: "image",
         },
       ],
-      firstAidGuidance: typeof firstAid === "string" ? firstAid : firstAid?.advice || firstAid?.response || "",
+      firstAidGuidance:
+        typeof firstAid === "string"
+          ? firstAid
+          : Array.isArray(firstAid?.steps)
+          ? firstAid.steps.join(" ")
+          : firstAid?.advice || firstAid?.response || "",
       statusLog: [{ status: "reported", changedBy: req.user._id }],
     });
 
-    res.status(201).json({ success: true, data: rescueCase });
+    res.status(201).json({
+      success: true,
+      data: rescueCase,
+      ai: {
+        severity,
+        duplicate,
+        firstAid,
+      },
+    });
   } catch (err) {
     next(err);
   }
@@ -95,6 +114,27 @@ exports.getUserHistory = async (req, res, next) => {
   try {
     const cases = await RescueCase.find({ reportedBy: req.user._id }).sort({ createdAt: -1 });
     res.json({ success: true, count: cases.length, data: cases });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.getUserSummary = async (req, res, next) => {
+  try {
+    const cases = await RescueCase.find({ reportedBy: req.user._id }).select("status urgencyLevel createdAt");
+    const reportsSubmitted = cases.length;
+    const casesResolved = cases.filter((item) => ["rescued", "closed"].includes(item.status)).length;
+    const casesInProgress = cases.filter((item) => !["rescued", "closed", "rejected"].includes(item.status)).length;
+
+    res.json({
+      success: true,
+      data: {
+        reportsSubmitted,
+        casesResolved,
+        casesInProgress,
+        rewardPointsEarned: req.user.rescuePoints || 0,
+      },
+    });
   } catch (err) {
     next(err);
   }

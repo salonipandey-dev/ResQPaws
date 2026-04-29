@@ -3,10 +3,14 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { LayoutDashboard, FilePlus2, MapPinned, Trophy, User, LogOut, Building2, ListChecks, Map, History, ShieldCheck, Users2, BarChart3, Settings, FileText } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/layout/Logo";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { clearToken, hasToken } from "@/lib/auth";
+import { authApi } from "@/services/api";
+import { useEffect, useMemo, useState } from "react";
 
 export type NavItem = { href: string; label: string; icon: any };
 
@@ -33,8 +37,34 @@ const ADMIN_NAV: NavItem[] = [
 
 export function AppShell({ children, role }: { children: React.ReactNode; role: "user" | "ngo" | "admin" }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [userName, setUserName] = useState("User");
+  const [initial, setInitial] = useState("U");
   const nav = role === "ngo" ? NGO_NAV : role === "admin" ? ADMIN_NAV : USER_NAV;
   const roleLabel = role === "ngo" ? "NGO Console" : role === "admin" ? "Admin Console" : "My Dashboard";
+
+  useEffect(() => {
+    if (!hasToken()) {
+      router.replace("/login");
+      return;
+    }
+
+    authApi.me().then(({ data }) => {
+      const name = data?.user?.name || "User";
+      setUserName(name);
+      setInitial(name.slice(0, 1).toUpperCase());
+    }).catch(() => {
+      clearToken();
+      router.replace("/login");
+    });
+  }, [router]);
+
+  const title = useMemo(() => nav.find((n) => n.href === pathname)?.label || "Dashboard", [nav, pathname]);
+
+  const logout = () => {
+    clearToken();
+    router.push("/login");
+  };
 
   return (
     <div className="min-h-screen flex bg-secondary/30">
@@ -73,12 +103,13 @@ export function AppShell({ children, role }: { children: React.ReactNode; role: 
         <header className="sticky top-0 z-30 backdrop-blur-xl bg-background/70 border-b border-border">
           <div className="flex h-16 items-center justify-between px-5">
             <div>
-              <p className="font-display text-xl font-bold tracking-tight capitalize">{nav.find((n) => n.href === pathname)?.label || "Dashboard"}</p>
-              <p className="text-xs text-muted-foreground">Welcome back.</p>
+              <p className="font-display text-xl font-bold tracking-tight capitalize">{title}</p>
+              <p className="text-xs text-muted-foreground">Welcome back, {userName}.</p>
             </div>
             <div className="flex items-center gap-2">
               <ThemeToggle />
-              <Avatar className="h-9 w-9"><AvatarFallback>U</AvatarFallback></Avatar>
+              <button type="button" onClick={logout} className="text-xs text-muted-foreground hover:text-foreground">Logout</button>
+              <Avatar className="h-9 w-9"><AvatarFallback>{initial}</AvatarFallback></Avatar>
             </div>
           </div>
         </header>

@@ -1,13 +1,16 @@
+from pathlib import Path
+
+import joblib
 from fastapi import APIRouter
 from pydantic import BaseModel
-import joblib
 
 router = APIRouter(
     prefix="/severity",
     tags=["Severity Prediction"]
 )
 
-model = joblib.load("app/ml/models/severity_model.pkl")
+MODEL_PATH = Path(__file__).resolve().parents[1] / "ml" / "models" / "severity_model.pkl"
+model = joblib.load(MODEL_PATH)
 
 class SeverityRequest(BaseModel):
     text: str

@@ -1,25 +1,58 @@
 import { NextResponse } from "next/server";
 
-export async function GET(_req: Request, { params }: { params: { path?: string[] } }) {
+const BACKEND_API_URL = process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+
+async function forward(req: Request, params: { path?: string[] }) {
   const route = params.path?.join("/") || "";
-  if (route === "" || route === "health") {
-    return NextResponse.json({ ok: true, service: "ResQPaws API", time: new Date().toISOString() });
+  const target = `${BACKEND_API_URL.replace(/\/$/, "")}/${route}`;
+  const contentType = req.headers.get("content-type") || "";
+
+  const init: RequestInit = {
+    method: req.method,
+    headers: {
+      Authorization: req.headers.get("authorization") || "",
+    },
+  };
+
+  if (req.method !== "GET" && req.method !== "HEAD") {
+    if (contentType.includes("application/json")) {
+      init.headers = { ...init.headers, "Content-Type": "application/json" };
+      init.body = JSON.stringify(await req.json().catch(() => ({})));
+    } else {
+      init.body = await req.arrayBuffer();
+      if (contentType) {
+        init.headers = { ...init.headers, "Content-Type": contentType };
+      }
+    }
   }
-  if (route === "stats") {
-    return NextResponse.json({
-      reportsSubmitted: 0,
-      casesInProgress: 0,
-      casesResolved: 0,
-      rewardPointsEarned: 0,
-    });
-  }
-  return NextResponse.json({ ok: false, message: "Not found" }, { status: 404 });
+
+  const response = await fetch(target, init);
+  const body = await response.text();
+
+  return new NextResponse(body, {
+    status: response.status,
+    headers: {
+      "Content-Type": response.headers.get("content-type") || "application/json",
+    },
+  });
 }
 
-export async function POST(req: Request, { params }: { params: { path?: string[] } }) {
-  const route = params.path?.join("/") || "";
-  const body = await req.json().catch(() => ({}));
-  if (route === "reports") return NextResponse.json({ ok: true, message: "Report payload received", received: body });
-  if (route === "chat") return NextResponse.json({ ok: true, reply: "Thank you. Use Rescue Guide for emergency-safe instructions and report tracking." });
-  return NextResponse.json({ ok: false, message: "Not found" }, { status: 404 });
+export async function GET(req: Request, context: { params: { path?: string[] } }) {
+  return forward(req, context.params);
+}
+
+export async function POST(req: Request, context: { params: { path?: string[] } }) {
+  return forward(req, context.params);
+}
+
+export async function PUT(req: Request, context: { params: { path?: string[] } }) {
+  return forward(req, context.params);
+}
+
+export async function PATCH(req: Request, context: { params: { path?: string[] } }) {
+  return forward(req, context.params);
+}
+
+export async function DELETE(req: Request, context: { params: { path?: string[] } }) {
+  return forward(req, context.params);
 }

@@ -1,6 +1,6 @@
 const express = require("express");
 const { body, param } = require("express-validator");
-const { reportRescue, getRescueById, getUserHistory } = require("../controllers/rescueController");
+const { reportRescue, getRescueById, getUserHistory, getUserSummary } = require("../controllers/rescueController");
 const { protect } = require("../middleware/auth");
 const { uploadCaseMedia } = require("../config/cloudinary");
 
@@ -23,6 +23,7 @@ router.post(
 );
 
 router.get("/user/history", protect, getUserHistory);
+router.get("/user/summary", protect, getUserSummary);
 router.get("/:id", [param("id").isMongoId().withMessage("Invalid rescue case id")], getRescueById);
 
 module.exports = router;
