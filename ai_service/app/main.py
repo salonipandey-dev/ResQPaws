@@ -1,27 +1,14 @@
 from fastapi import FastAPI
-from app.routers import health , severity ,vision , firstaid  , analytics , reports
+from app.routers import severity
 
+app = FastAPI(title="ResQPaws Severity API")
 
-
-
-
-app = FastAPI(
-    title="ResQPaws AI Service",
-    version="1.0.0",
-    description="AI Engine for animal rescue coordination"
-)
-
-app.include_router(health.router)
 app.include_router(severity.router)
-app.include_router(vision.router)
-app.include_router(firstaid.router)
-
-app.include_router(analytics.router)
-app.include_router(reports.router)
-
 
 @app.get("/")
-def root():
-    return {
-        "message": "ResQPaws AI Running"
-    }
+def home():
+    return {"message": "ResQPaws Severity API Live"}
+
+@app.get("/health")
+def health():
+    return {"status": "healthy"}

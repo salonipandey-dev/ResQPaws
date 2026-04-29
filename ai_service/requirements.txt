@@ -1,5 +1,7 @@
 fastapi
 uvicorn
+scikit-learn
+joblib
+numpy
+scipy
 pydantic
-python-dotenv
-

@@ -1,9 +1,22 @@
 from fastapi import APIRouter
-from app.schemas.request import SeverityRequest
-from app.services.triage_service import predict_severity
+from pydantic import BaseModel
+import joblib
 
-router = APIRouter(prefix="/severity", tags=["Severity"])
+router = APIRouter(
+    prefix="/severity",
+    tags=["Severity Prediction"]
+)
+
+model = joblib.load("app/ml/models/severity_model.pkl")
+
+class SeverityRequest(BaseModel):
+    text: str
 
 @router.post("/predict")
-def severity_check(data: SeverityRequest):
-    return predict_severity(data.text)
+def predict(request: SeverityRequest):
+    result = model.predict([request.text])[0]
+
+    return {
+        "text": request.text,
+        "severity": result
+    }
