@@ -6,7 +6,11 @@ from app.routers.firstaid import router as firstaid_router
 from app.routers.health import router as health_router
 from app.routers.severity import router as severity_router
 
-app = FastAPI(title="ResQPaws AI Service", version="1.0.0")
+app = FastAPI(
+    title="ResQPaws AI Service",
+    version="1.0.0",
+    redirect_slashes=False,  # <-- ADD THIS LINE — kills the 307 redirect
+)
 
 default_origins = ["http://localhost:3000", "http://127.0.0.1:3000"]
 env_origins = [o.strip() for o in os.getenv("CORS_ORIGINS", "").split(",") if o.strip()]
