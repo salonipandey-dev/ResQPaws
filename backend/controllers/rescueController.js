@@ -98,12 +98,18 @@ exports.reportRescue = async (req, res, next) => {
 
 exports.getRescueById = async (req, res, next) => {
   try {
+    if (!validationResult(req).isEmpty()) throw new ApiError(400, "Invalid rescue case id");
     const rescueCase = await RescueCase.findById(req.params.id)
       .populate("reportedBy", "name email role")
       .populate("assignedTo", "name email role");
 
     if (!rescueCase) throw new ApiError(404, "Rescue case not found");
 
+    const reporterId = rescueCase.reportedBy?._id || rescueCase.reportedBy;
+    const assigneeId = rescueCase.assignedTo?._id || rescueCase.assignedTo;
+    if (req.user.role !== "admin" && String(reporterId) !== String(req.user._id) && String(assigneeId) !== String(req.user._id)) {
+      throw new ApiError(403, "You do not have access to this rescue case");
+    }
     res.json({ success: true, data: rescueCase });
   } catch (err) {
     next(err);

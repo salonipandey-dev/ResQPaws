@@ -24,6 +24,6 @@ router.post(
 
 router.get("/user/history", protect, getUserHistory);
 router.get("/user/summary", protect, getUserSummary);
-router.get("/:id", [param("id").isMongoId().withMessage("Invalid rescue case id")], getRescueById);
+router.get("/:id", protect, [param("id").isMongoId().withMessage("Invalid rescue case id")], getRescueById);
 
 module.exports = router;

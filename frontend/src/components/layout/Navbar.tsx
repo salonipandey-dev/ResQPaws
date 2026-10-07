@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 
 const NAV = [
   { href: "/", label: "Home" },
+  { href: "/demo", label: "Explore Demo" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
@@ -69,6 +70,8 @@ export function Navbar() {
           <Link href="/login" className={cn(buttonVariants({ size: "sm" }), "hidden sm:inline-flex rounded-full shadow-glow")}>Get Started</Link>
           <button
             type="button"
+            aria-label={open ? "Close navigation" : "Open navigation"}
+            aria-expanded={open}
             className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background/80 text-foreground shadow-sm transition hover:bg-background md:hidden"
             onClick={() => setOpen((prev) => !prev)}
           >

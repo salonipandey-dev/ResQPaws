@@ -1,14 +1,14 @@
 export const homeContent = {
   hero: {
-    badge: "Verified Rescue Coordination",
+    badge: "Animal Rescue · Student Prototype",
     headline: "Help Street Animals Get Help Faster",
     subheadline:
-      "Report injured, abandoned, or distressed animals nearby. We connect your report with verified rescuers, NGOs, and volunteers.",
+      "Report injured, abandoned, or distressed animals nearby. Create a structured rescue report and follow its progress. Explore the prototype before setting up the full rescue workflow.",
     primaryCta: { label: "Report an Animal", href: "/dashboard/report" },
-    secondaryCta: { label: "Track My Report", href: "/dashboard/track" },
+    secondaryCta: { label: "Explore the Demo", href: "/demo" },
     trustLine: "Privacy protected reporting with community-led follow-up.",
     floatingCards: {
-      response: { label: "Real-time Rescue Coordination", value: "Live" },
+      response: { label: "Real-time Rescue Coordination", value: "Prototype" },
       activity: { label: "Case tracking updates", value: "Enabled" },
       location: "Location-enabled response",
     },

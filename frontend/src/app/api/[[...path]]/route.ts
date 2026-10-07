@@ -4,11 +4,13 @@ const BACKEND_API_URL = process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_A
 
 async function forward(req: Request, params: { path?: string[] }) {
   const route = params.path?.join("/") || "";
-  const target = `${BACKEND_API_URL.replace(/\/$/, "")}/${route}`;
+  const target = `${BACKEND_API_URL.replace(/\/$/, "")}/${route}${new URL(req.url).search}`;
   const contentType = req.headers.get("content-type") || "";
 
   const init: RequestInit = {
     method: req.method,
+    cache: "no-store",
+    signal: AbortSignal.timeout(20000),
     headers: {
       Authorization: req.headers.get("authorization") || "",
     },
@@ -26,10 +28,15 @@ async function forward(req: Request, params: { path?: string[] }) {
     }
   }
 
-  const response = await fetch(target, init);
+  let response: Response;
+  try {
+    response = await fetch(target, init);
+  } catch {
+    return NextResponse.json({ success: false, message: "Rescue service is temporarily unavailable. Please try again shortly." }, { status: 502 });
+  }
   const body = await response.text();
 
-  return new NextResponse(body, {
+  return new NextResponse(response.status === 204 || response.status === 304 ? null : body, {
     status: response.status,
     headers: {
       "Content-Type": response.headers.get("content-type") || "application/json",
