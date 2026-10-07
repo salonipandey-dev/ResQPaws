@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 
-const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
-const aiBaseURL = process.env.NEXT_PUBLIC_AI_URL || "http://localhost:8000";
+const baseURL = process.env.NEXT_PUBLIC_API_URL || "/api";
+const aiBaseURL = process.env.NEXT_PUBLIC_AI_URL || "/api/ai";
 
 export const api = axios.create({
   baseURL,
@@ -85,7 +85,7 @@ export const rewardsApi = {
 };
 
 export const aiApi = {
-  health: () => aiClient.get("/health"),
+
   severity: (payload: unknown) => aiClient.post("/severity", payload),
   duplicate: (payload: unknown) => aiClient.post("/duplicate", payload),
   firstAid: (payload: unknown) => aiClient.post("/firstaid", payload),
