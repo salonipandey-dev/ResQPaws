@@ -33,4 +33,4 @@ jobs:
           cache: npm
           cache-dependency-path: backend/package-lock.json
       - run: npm ci
-      - run: node --test tests/case-access.test.js
+      - run: node --test tests/*.test.js
