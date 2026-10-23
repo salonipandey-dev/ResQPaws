@@ -92,7 +92,7 @@ cd frontend
 npm run typecheck
 npm run build
 # From repository root:
-node --test backend/tests/case-access.test.js
+node --test backend/tests/*.test.js
 ```
 
 ## Next milestones
